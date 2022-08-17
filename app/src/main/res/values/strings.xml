@@ -1,0 +1,8 @@
+<resources>
+    <string name="app_name">WeatherApp</string>
+    <string name="refresh">refresh</string>
+    <string name="content_description_favorite">content description favorite</string>
+    <string name="settings">settings</string>
+    <string name="content_description_search">content description settings</string>
+    <string name="page_title">TitleOfTheToolBar</string>
+</resources>
