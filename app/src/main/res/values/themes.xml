@@ -12,5 +12,25 @@
         <!-- Status bar color. -->
         <item name="android:statusBarColor" tools:targetApi="l">?attr/colorPrimaryVariant</item>
         <!-- Customize your theme here. -->
+
+        <item name="fontFamily">@font/literata_regular</item>
+        <item name="android:textColor">@color/black</item>
+    </style>
+
+    <style name="Widget.AppCompat.TextView.CenteredWithPaddings">
+        <item name="android:gravity">center</item>
+        <item name="android:padding">7dp</item>
+    </style>
+    <style name="Widget.AppCompat.TextView.H1" parent="Widget.AppCompat.TextView.CenteredWithPaddings">
+        <item name="fontFamily">@font/literata_extrabold</item>
+        <item name="android:textSize">40sp</item>
+    </style>
+    <style name="Widget.AppCompat.TextView.H2" parent="Widget.AppCompat.TextView.CenteredWithPaddings">
+        <item name="fontFamily">@font/literata_bold</item>
+        <item name="android:textSize">27sp</item>
+    </style>
+    <style name="Widget.AppCompat.TextView.H3" parent="Widget.AppCompat.TextView.CenteredWithPaddings">
+        <item name="fontFamily">@font/literata_medium</item>
+        <item name="android:textSize">17sp</item>
     </style>
 </resources>

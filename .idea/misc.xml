@@ -3,7 +3,8 @@
   <component name="DesignSurface">
     <option name="filePathToZoomLevelMap">
       <map>
-        <entry key="app/src/main/res/layout/activity_main.xml" value="0.22916666666666666" />
+        <entry key="app/src/main/res/layout/activity_main.xml" value="0.24965893587994542" />
+        <entry key="app/src/main/res/layout/rvitem_weather.xml" value="0.2880228678385417" />
         <entry key="app/src/main/res/menu/top_app_bar.xml" value="0.19739583333333333" />
       </map>
     </option>

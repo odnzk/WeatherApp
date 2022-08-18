@@ -1,12 +1,13 @@
-package com.example.weatherapp
+package com.example.weatherapp.data
 
+import com.example.weatherapp.data.response.WeatherForecast
 import okhttp3.OkHttpClient
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
 
 private const val BASE_URL = "https://api.openweathermap.org/data/2.5/"
 
-object WeatherRepository {
+class WeatherRepository {
 
     private val okhttp: OkHttpClient by lazy {
         OkHttpClient.Builder().build()
@@ -18,7 +19,8 @@ object WeatherRepository {
             .create(Api::class.java)
     }
 
-    suspend fun getWeather(latitude: Double, longitude:Double){
-        api.getWeather(latitude, longitude)
+
+    suspend fun getWeatherForecast(latitude: Int, longitude:Int, apiKey:String): WeatherForecast{
+       return  api.getWeatherForecast(latitude, longitude, apiKey)
     }
 }

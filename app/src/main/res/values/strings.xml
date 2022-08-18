@@ -5,4 +5,23 @@
     <string name="settings">settings</string>
     <string name="content_description_search">content description settings</string>
     <string name="page_title">TitleOfTheToolBar</string>
+    <string name="wind">Wind</string>
+    <string name="humidity">Humidity</string>
+    <string name="visibility">Visibility</string>
+    <string name="pressure">Pressure</string>
+    <string name="temperature_unit">%1$d K</string>
+    <string name="pressure_unit">%1$d hPa</string>
+    <string name="wind_unit">%1$f km/h</string>
+    <string name="humidity_unit">%1$d %1$s</string>
+    <string name="visibility_unit">%1$d m</string>
+
+    <string-array name="days_of_week">
+        <item>Mon</item>
+        <item>Tue</item>
+        <item>Wed</item>
+        <item>Thu</item>
+        <item>Fri</item>
+        <item>Sat</item>
+        <item>Sun</item>
+    </string-array>
 </resources>
