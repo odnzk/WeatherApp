@@ -23,18 +23,21 @@
         style="@style/Widget.AppCompat.TextView.H1"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        app:layout_constraintBottom_toTopOf="@id/tv_day_and_time"
+        app:layout_constraintBottom_toTopOf="@id/textClock"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/iv_weather" />
 
-    <TextView
-        android:id="@+id/tv_day_and_time"
-        style="@style/Widget.AppCompat.TextView.H2"
+    <TextClock
+        android:id="@+id/textClock"
         android:layout_width="wrap_content"
+        style="@style/Widget.AppCompat.TextView.TextClock"
         android:layout_height="wrap_content"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
+        android:format12Hour="h:mmaa"
+        android:format24Hour="EE, HH:mm"
+        android:visibility="gone"
         app:layout_constraintTop_toBottomOf="@id/tv_temperature" />
 
     <TextView
@@ -47,7 +50,7 @@
         android:visibility="gone"
         app:layout_constraintEnd_toStartOf="@id/tv_title_wind"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/tv_day_and_time" />
+        app:layout_constraintTop_toBottomOf="@id/textClock" />
 
     <TextView
         android:id="@+id/tv_title_wind"

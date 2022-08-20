@@ -1,12 +1,13 @@
 package com.example.weatherapp.util.managers
 
+import android.app.Activity
 import android.content.Context
 import android.content.pm.PackageManager
 import androidx.activity.result.ActivityResultLauncher
 import androidx.core.app.ActivityCompat
 
 class PermissionManager(
-    private val context: Context,
+    private val context: Activity,
     private val locationPermissionRequest: ActivityResultLauncher<Array<String>>
 ) {
 
