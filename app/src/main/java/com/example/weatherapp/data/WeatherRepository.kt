@@ -6,6 +6,7 @@ import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
 
 private const val BASE_URL = "https://api.openweathermap.org/data/2.5/"
+private const val API_KEY = "7772c8e5d929dc484f8137d8cf85e7fb"
 
 class WeatherRepository {
 
@@ -20,7 +21,7 @@ class WeatherRepository {
     }
 
 
-    suspend fun getWeatherForecast(latitude: Int, longitude:Int, apiKey:String): WeatherForecast{
-       return  api.getWeatherForecast(latitude, longitude, apiKey)
+    suspend fun getWeatherForecast(latitude: Int, longitude: Int): WeatherForecast {
+        return api.getWeatherForecast(latitude, longitude, API_KEY)
     }
 }

@@ -2,7 +2,7 @@ package com.example.weatherapp.data.response
 
 data class MainInformationAboutDay(
     val clouds: Clouds,
-    val dt: Int,
+    val dt: Long,
     val dt_txt: String,
     val main: Main,
     val pop: Int,
