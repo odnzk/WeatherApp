@@ -1,10 +1,8 @@
 package com.example.weatherapp
 
-import android.app.Application
-import androidx.activity.result.ActivityResultLauncher
-import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
+import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.weatherapp.data.WeatherRepository
 import com.example.weatherapp.data.response.WeatherForecast
@@ -12,17 +10,12 @@ import com.example.weatherapp.util.managers.LocationManager
 import kotlinx.coroutines.launch
 
 class MainViewModel(
-    application: Application,
-    locationPermissionRequest: ActivityResultLauncher<Array<String>>,
+    private val locationManager: LocationManager,
     private val repository: WeatherRepository
-) : AndroidViewModel(application) {
+) : ViewModel() {
 
     private val _weatherForecast = MutableLiveData<Result<WeatherForecast>>()
     val weatherForecast: LiveData<Result<WeatherForecast>> = _weatherForecast
-    private val locationManager: LocationManager = LocationManager(
-        application,
-        locationPermissionRequest
-    )
 
     // Load data from a suspend fun and mutate state
     init {

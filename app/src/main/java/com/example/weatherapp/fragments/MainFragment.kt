@@ -20,6 +20,7 @@ import com.example.weatherapp.data.response.WeatherForecast
 import com.example.weatherapp.databinding.FragmentMainBinding
 import com.example.weatherapp.util.WeatherForecastAdapter
 import com.example.weatherapp.util.managers.ConvertingManager
+import com.example.weatherapp.util.managers.LocationManager
 
 class MainFragment : Fragment() {
     private var _binding: FragmentMainBinding? = null
@@ -36,12 +37,16 @@ class MainFragment : Fragment() {
     ): View {
         _binding = FragmentMainBinding.inflate(inflater, container, false)
 
-        showProgressBar()
-
         val modelFactory =
-            MainViewModelFactory(activity?.application!!, MainActivity().locationPermissionRequest, repository)
+            MainViewModelFactory(
+                LocationManager(
+                    requireActivity(),
+                    MainActivity().locationPermissionRequest
+                ), repository
+            )
         viewModel = ViewModelProvider(this, modelFactory)[MainViewModel::class.java]
 
+        showProgressBar()
         initObserves()
 
         with(binding) {
@@ -103,7 +108,6 @@ class MainFragment : Fragment() {
                 tvWind.text = getString(R.string.wind_unit, converter.formatDouble(wind.speed))
                 ivWeather.setImageResource(converter.convertIcon(weather[0].id, weather[0].icon))
             }
-            tvDayAndTime.text = converter.convertDayTime()
             rvWeather.adapter = WeatherForecastAdapter(weatherForecast.list.drop(1), resources)
         }
     }

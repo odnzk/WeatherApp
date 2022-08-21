@@ -6,6 +6,7 @@ import java.text.SimpleDateFormat
 import java.util.*
 
 class ConvertingManager(private val res: Resources) {
+
     companion object {
         const val M_IN_KM = 1000.0
         const val FORMAT_DOUBLE = "%.1f"
@@ -22,19 +23,6 @@ class ConvertingManager(private val res: Resources) {
         const val CLOUDS_WITH_SUN_ICON = 801
         const val CLOUDS_ICON_LOWER_BOUND = 802
         const val CLOUDS_ICON_UPPER_BOUND = 804
-    }
-
-    fun convertDayTime(): String {
-        val calendar = Calendar.getInstance()
-        return res.getString(
-            R.string.day_time_format,
-            convertToDayOfWeek(calendar.get(Calendar.DAY_OF_WEEK)),
-            format(calendar.timeInMillis, FORMAT_TIME)
-        )
-    }
-
-    private fun convertToDayOfWeek(day: Int): String {
-        return res.getStringArray(R.array.days_of_week)[day - 2]
     }
 
     fun convertVisibility(visibility: Int): String {

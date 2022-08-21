@@ -1,23 +1,19 @@
 package com.example.weatherapp
 
 import android.os.Bundle
-import android.util.Log
 import android.widget.Toast
 import androidx.activity.result.ActivityResultLauncher
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.ViewModelProvider
-import androidx.lifecycle.lifecycleScope
 import com.example.weatherapp.data.WeatherRepository
 import com.example.weatherapp.databinding.ActivityMainBinding
-import com.google.android.gms.location.FusedLocationProviderClient
-import com.google.android.gms.location.LocationServices
+import com.example.weatherapp.util.managers.LocationManager
 
 
 class MainActivity : AppCompatActivity() {
     private lateinit var binding: ActivityMainBinding
     private lateinit var viewModel: MainViewModel
-    private lateinit var fusedLocationClient: FusedLocationProviderClient
 
 
     val locationPermissionRequest by lazy {
@@ -34,16 +30,11 @@ class MainActivity : AppCompatActivity() {
         setContentView(binding.root)
 
         val modelFactory =
-            MainViewModelFactory(application, locationPermissionRequest, repository)
+            MainViewModelFactory(LocationManager(this, locationPermissionRequest), repository)
         viewModel = ViewModelProvider(this, modelFactory)[MainViewModel::class.java]
 
         initObservers()
 
-        ///
-        fusedLocationClient = LocationServices.getFusedLocationProviderClient(this)
-
-
-        ////
         with(binding) {
             topAppBar.setOnMenuItemClickListener { menuItem ->
                 when (menuItem.itemId) {
