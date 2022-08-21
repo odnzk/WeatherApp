@@ -25,13 +25,12 @@ class ConvertingManager(private val res: Resources) {
     }
 
     fun convertDayTime(): String {
-        return Calendar.getInstance().run {
-            convertToDayOfWeek(
-                get(Calendar.DAY_OF_WEEK)
-            ) + ", " + get(Calendar.HOUR_OF_DAY) + ":" + get(
-                Calendar.MINUTE
-            )
-        }
+        val calendar = Calendar.getInstance()
+        return res.getString(
+            R.string.day_time_format,
+            convertToDayOfWeek(calendar.get(Calendar.DAY_OF_WEEK)),
+            format(calendar.timeInMillis, FORMAT_TIME)
+        )
     }
 
     private fun convertToDayOfWeek(day: Int): String {
@@ -64,15 +63,15 @@ class ConvertingManager(private val res: Resources) {
         }
     }
 
-    private fun format(unix: Long, pattern: String): String {
-        return SimpleDateFormat(pattern).format(Date(unix * UNIX_NUMBER))
+    private fun format(milliseconds: Long, pattern: String): String {
+        return SimpleDateFormat(pattern).format(Date(milliseconds))
     }
 
     fun convertDate(unix: Long): String {
-        return format(unix, FORMAT_DATE)
+        return format(unix * UNIX_NUMBER, FORMAT_DATE)
     }
 
     fun convertTime(unix: Long): String {
-        return format(unix, FORMAT_TIME)
+        return format(unix * UNIX_NUMBER, FORMAT_TIME)
     }
 }

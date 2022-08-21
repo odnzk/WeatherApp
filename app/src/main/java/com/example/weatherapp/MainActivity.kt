@@ -1,54 +1,54 @@
 package com.example.weatherapp
 
 import android.os.Bundle
+import android.util.Log
 import android.widget.Toast
 import androidx.activity.result.ActivityResultLauncher
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.appcompat.app.AppCompatActivity
+import androidx.lifecycle.ViewModelProvider
+import androidx.lifecycle.lifecycleScope
+import com.example.weatherapp.data.WeatherRepository
 import com.example.weatherapp.databinding.ActivityMainBinding
+import com.google.android.gms.location.FusedLocationProviderClient
+import com.google.android.gms.location.LocationServices
 
 
 class MainActivity : AppCompatActivity() {
     private lateinit var binding: ActivityMainBinding
-    private lateinit var locationPermissionRequest: ActivityResultLauncher<Array<String>>
+    private lateinit var viewModel: MainViewModel
+    private lateinit var fusedLocationClient: FusedLocationProviderClient
 
 
-//    private val repository by lazy {
-//        WeatherRepository()
-//    }
+    val locationPermissionRequest by lazy {
+        initLocationPermissionRequest()
+    }
+
+    private val repository by lazy {
+        WeatherRepository()
+    }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
+        val modelFactory =
+            MainViewModelFactory(application, locationPermissionRequest, repository)
+        viewModel = ViewModelProvider(this, modelFactory)[MainViewModel::class.java]
 
+        initObservers()
+
+        ///
+        fusedLocationClient = LocationServices.getFusedLocationProviderClient(this)
+
+
+        ////
         with(binding) {
             topAppBar.setOnMenuItemClickListener { menuItem ->
                 when (menuItem.itemId) {
                     R.id.refresh -> {
-                        // we get weather forecast from MainActivity and
-                        // send it to the ViewModel, to which later Fragment
-                        // will subscribe
-//                        val locationManager = LocationManager(
-//                            this@MainActivity,
-//                            locationPermissionRequest
-//                        )
-//                        locationManager.getLastKnownLocation()?.let {
-//                            it.addOnSuccessListener { location ->
-//                                lifecycleScope.launch {
-//                                    try {
-//                                        val weather = repository.getWeatherForecast(
-//                                            location.longitude.toInt(),
-//                                            location.latitude.toInt()
-//                                        )
-//                                        // sending weather forecast to the ViewModel
-//                                    } catch (ex: Exception) {
-//                                        Log.e("", ex.message.toString())
-//                                    }
-//                                }
-//                            }
-                        // }
+                        viewModel.loadData()
                         true
                     }
                     R.id.settings -> {
@@ -59,9 +59,12 @@ class MainActivity : AppCompatActivity() {
                 }
             }
         }
-        locationPermissionRequest = registerForActivityResult(
-            ActivityResultContracts.RequestMultiplePermissions()
-        ) { permissions ->
+
+
+    }
+
+    private fun initLocationPermissionRequest(): ActivityResultLauncher<Array<String>> {
+        return registerForActivityResult(ActivityResultContracts.RequestMultiplePermissions()) { permissions ->
             when {
                 permissions.getOrDefault(
                     android.Manifest.permission.ACCESS_FINE_LOCATION,
@@ -94,11 +97,24 @@ class MainActivity : AppCompatActivity() {
                     // No location access granted.
                 }
             }
-
         }
+    }
 
+    private fun initObservers(){
+        viewModel.weatherForecast.observe(this){ resWeatherForecast ->
+            resWeatherForecast.fold(
+                onSuccess = {
+                    it.city.run{
+                        binding.topAppBar.title = getString(R.string.city_country_format, name, country)
+                    }
+                },
+                onFailure =
+                {
+                    Toast.makeText(this, R.string.error_message, Toast.LENGTH_SHORT).show()
+                })
+        }
     }
-    }
+}
 
 
 

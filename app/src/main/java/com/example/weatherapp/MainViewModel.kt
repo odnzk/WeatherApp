@@ -14,24 +14,28 @@ import kotlinx.coroutines.launch
 class MainViewModel(
     application: Application,
     locationPermissionRequest: ActivityResultLauncher<Array<String>>,
-    repository: WeatherRepository
+    private val repository: WeatherRepository
 ) : AndroidViewModel(application) {
 
     private val _weatherForecast = MutableLiveData<Result<WeatherForecast>>()
     val weatherForecast: LiveData<Result<WeatherForecast>> = _weatherForecast
+    private val locationManager: LocationManager = LocationManager(
+        application,
+        locationPermissionRequest
+    )
 
     // Load data from a suspend fun and mutate state
     init {
-        val locationManager = LocationManager(
-            application,
-            locationPermissionRequest
-        )
+        loadData()
+    }
+
+    fun loadData() {
         locationManager.getLastKnownLocation()?.let {
             it.addOnSuccessListener { location ->
                 viewModelScope.launch {
                     val result = repository.getWeatherForecast(
-                        location.longitude.toInt(),
-                        location.latitude.toInt()
+                        location.latitude.toInt(),
+                        location.longitude.toInt()
                     )
                     _weatherForecast.value = Result.success(result)
                 }

@@ -5,14 +5,13 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
-import androidx.activity.result.ActivityResultLauncher
-import androidx.activity.result.contract.ActivityResultContracts
 import androidx.core.view.children
 import androidx.core.widget.ContentLoadingProgressBar
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.RecyclerView
+import com.example.weatherapp.MainActivity
 import com.example.weatherapp.MainViewModel
 import com.example.weatherapp.MainViewModelFactory
 import com.example.weatherapp.R
@@ -25,7 +24,6 @@ import com.example.weatherapp.util.managers.ConvertingManager
 class MainFragment : Fragment() {
     private var _binding: FragmentMainBinding? = null
     private val binding get() = _binding!!
-    private lateinit var locationPermissionRequest: ActivityResultLauncher<Array<String>>
     private lateinit var viewModel: MainViewModel
 
     private val repository by lazy {
@@ -40,45 +38,8 @@ class MainFragment : Fragment() {
 
         showProgressBar()
 
-
-        locationPermissionRequest =
-            registerForActivityResult(ActivityResultContracts.RequestMultiplePermissions()) { permissions ->
-                when {
-                    permissions.getOrDefault(
-                        android.Manifest.permission.ACCESS_FINE_LOCATION,
-                        false
-                    ) -> {
-                        // Precise location access granted.
-                        Toast.makeText(
-                            context,
-                            getString(R.string.precise_location_access_granted),
-                            Toast.LENGTH_SHORT
-                        ).show()
-                    }
-                    permissions.getOrDefault(
-                        android.Manifest.permission.ACCESS_COARSE_LOCATION,
-                        false
-                    ) -> {
-                        // Only approximate location access granted.
-                        Toast.makeText(
-                            context,
-                            getString(R.string.only_approximate_location_access_granted),
-                            Toast.LENGTH_SHORT
-                        ).show()
-                    }
-                    else -> {
-                        Toast.makeText(
-                            context,
-                            getString(R.string.no_location_access_granted),
-                            Toast.LENGTH_SHORT
-                        ).show()
-                        // No location access granted.
-                    }
-                }
-            }
-
         val modelFactory =
-            MainViewModelFactory(activity?.application!!, locationPermissionRequest, repository)
+            MainViewModelFactory(activity?.application!!, MainActivity().locationPermissionRequest, repository)
         viewModel = ViewModelProvider(this, modelFactory)[MainViewModel::class.java]
 
         initObserves()
