@@ -8,6 +8,7 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.ViewModelProvider
 import com.example.weatherapp.data.WeatherRepository
 import com.example.weatherapp.databinding.ActivityMainBinding
+import com.example.weatherapp.fragments.MainFragment
 import com.example.weatherapp.util.managers.LocationManager
 
 
@@ -39,6 +40,7 @@ class MainActivity : AppCompatActivity() {
             topAppBar.setOnMenuItemClickListener { menuItem ->
                 when (menuItem.itemId) {
                     R.id.refresh -> {
+//                        fragmentContainerView.getFragment<MainFragment>().showProgressBar()
                         viewModel.loadData()
                         true
                     }

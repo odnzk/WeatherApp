@@ -13,7 +13,7 @@
 
         <TextView
             android:id="@+id/tv_date"
-            style="@style/Widget.AppCompat.TextView.H4"
+            style="@style/Widget.AppCompat.TextView.H5"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             app:layout_constraintBottom_toTopOf="@id/tv_time"
@@ -55,7 +55,7 @@
 
         <TextView
             android:id="@+id/tv_title_humidity"
-            style="@style/Widget.AppCompat.TextView.H4"
+            style="@style/Widget.AppCompat.TextView.H5"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             app:layout_constraintBottom_toBottomOf="parent"

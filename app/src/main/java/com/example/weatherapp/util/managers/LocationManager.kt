@@ -28,8 +28,8 @@ class LocationManager(
         } else {
             return LocationServices.getFusedLocationProviderClient(context).lastLocation
                 .addOnSuccessListener { l ->
-                    l.let {
-                        Location(it.latitude.toInt(), it.longitude.toInt())
+                    l?.let {
+                        Location(it.longitude.toInt(), it.latitude.toInt())
                     }
                 }
         }
