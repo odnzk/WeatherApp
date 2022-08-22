@@ -10,3 +10,11 @@
 <li><b>UI:</b>  CoordinatorLayout, Toolbar, RecyclerView, ConstraintLayout, FragmentContainerView,  NestedScrollView, TextClock and others</li>
 <li><b>For settings:</b>  AndroidX Preference library</li>
 </ul>
+
+</br>
+</br>
+</br>
+<a href="google.com">Screencast</a>
+</br>
+<a href="google.com">Design in Figma</a>
+</br>
