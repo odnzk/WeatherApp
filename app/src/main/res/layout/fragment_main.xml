@@ -12,6 +12,7 @@
         android:id="@+id/iv_weather"
         android:layout_width="100dp"
         android:layout_height="100dp"
+        android:visibility="gone"
         app:layout_constraintBottom_toTopOf="@id/tv_temperature"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
@@ -23,10 +24,25 @@
         style="@style/Widget.AppCompat.TextView.H1"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:visibility="visible"
+        app:layout_constraintBottom_toTopOf="@id/tv_feels_like"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/iv_weather"
+        tools:visibility="gone" />
+
+    <TextView
+        android:id="@+id/tv_feels_like"
+        style="@style/Widget.AppCompat.TextView.H3"
+        android:textColor="@color/white"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:visibility="gone"
         app:layout_constraintBottom_toTopOf="@id/textClock"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/iv_weather" />
+        app:layout_constraintTop_toBottomOf="@id/tv_temperature" />
+
 
     <TextClock
         android:id="@+id/textClock"
@@ -38,14 +54,14 @@
         android:format12Hour="h:mmaa"
         android:format24Hour="EE, HH:mm"
         android:visibility="gone"
-        app:layout_constraintTop_toBottomOf="@id/tv_temperature" />
+        app:layout_constraintTop_toBottomOf="@id/tv_feels_like" />
 
     <TextView
         android:id="@+id/tv_title_pressure"
-        style="@style/Widget.AppCompat.TextView.H3"
+        style="@style/Widget.AppCompat.TextView.H4"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:layout_marginTop="20dp"
+        android:layout_marginTop="25dp"
         android:text="@string/pressure"
         android:visibility="gone"
         app:layout_constraintEnd_toStartOf="@id/tv_title_wind"
@@ -54,7 +70,7 @@
 
     <TextView
         android:id="@+id/tv_title_wind"
-        style="@style/Widget.AppCompat.TextView.H3"
+        style="@style/Widget.AppCompat.TextView.H4"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:text="@string/wind"
@@ -69,6 +85,7 @@
         style="@style/Widget.AppCompat.TextView.CenteredWithPaddings"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
+        android:visibility="gone"
         app:layout_constraintEnd_toStartOf="@id/tv_title_wind"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/tv_title_pressure" />
@@ -85,7 +102,7 @@
 
     <TextView
         android:id="@+id/tv_title_humidity"
-        style="@style/Widget.AppCompat.TextView.H3"
+        style="@style/Widget.AppCompat.TextView.H4"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginTop="10dp"
@@ -97,7 +114,7 @@
 
     <TextView
         android:id="@+id/tv_title_visibility"
-        style="@style/Widget.AppCompat.TextView.H3"
+        style="@style/Widget.AppCompat.TextView.H4"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:text="@string/visibility"
@@ -111,6 +128,7 @@
         style="@style/Widget.AppCompat.TextView.CenteredWithPaddings"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
+        android:visibility="gone"
         app:layout_constraintEnd_toStartOf="@id/tv_title_visibility"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/tv_title_humidity" />
@@ -124,19 +142,72 @@
         app:layout_constraintStart_toEndOf="@id/tv_humidity"
         app:layout_constraintTop_toTopOf="@id/tv_humidity" />
 
+    <TextView
+        android:id="@+id/tv_sunrise_title"
+        style="@style/Widget.AppCompat.TextView.H3_not_centered"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="20dp"
+        android:text="@string/sunrise"
+        android:visibility="gone"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/tv_humidity" />
+
+    <TextView
+        android:id="@+id/tv_sunrise"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:layout_constraintStart_toStartOf="@id/tv_sunrise_title"
+        app:layout_constraintTop_toBottomOf="@id/tv_sunrise_title" />
+
+    <ImageView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:contentDescription="@string/sunrise_icon"
+        android:src="@drawable/ic_sunrise"
+        android:visibility="gone"
+        app:layout_constraintBottom_toBottomOf="@id/tv_sunrise"
+        app:layout_constraintEnd_toEndOf="parent" />
+
+    <TextView
+        android:id="@+id/tv_sunset_title"
+        style="@style/Widget.AppCompat.TextView.H3_not_centered"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="10dp"
+        android:text="@string/sunset"
+        android:visibility="gone"
+        app:layout_constraintStart_toStartOf="@id/tv_sunrise"
+        app:layout_constraintTop_toBottomOf="@id/tv_sunrise" />
+
+    <TextView
+        android:id="@+id/tv_sunset"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:layout_constraintStart_toStartOf="@id/tv_sunset_title"
+        app:layout_constraintTop_toBottomOf="@id/tv_sunset_title" />
+
+    <ImageView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:contentDescription="@string/sunset_icon"
+        android:src="@drawable/ic_sunset"
+        android:visibility="gone"
+        app:layout_constraintBottom_toBottomOf="@id/tv_sunset"
+        app:layout_constraintEnd_toEndOf="parent" />
+
 
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/rv_weather"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginTop="24dp"
+        android:layout_marginTop="25dp"
         android:orientation="horizontal"
         android:visibility="gone"
         app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
+        app:layout_constraintTop_toBottomOf="@id/tv_sunset"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/tv_humidity"
         tools:listitem="@layout/rvitem_weather" />
 
     <androidx.core.widget.ContentLoadingProgressBar
@@ -144,7 +215,6 @@
         style="?android:attr/progressBarStyleLarge"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />

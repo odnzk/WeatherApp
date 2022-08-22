@@ -15,6 +15,7 @@
     <string name="visibility_unit_m">%1$d m</string>
     <string name="visibility_unit_km">%1$s km</string>
     <string name="day_time_format">%1$s,  %2$s</string>
+    <string name="feels_like">Feels like %1$dK</string>
     <string name="city_country_format">%1$s,  %2$s</string>
     <string name="no_location_access_granted">Allow using location  to get Weather data</string>
     <string name="only_approximate_location_access_granted">Great! Now, please, try loading weather forecast again</string>
@@ -31,4 +32,8 @@
         <item>Sun</item>
     </string-array>
     <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="sunrise">Sunrise</string>
+    <string name="sunrise_icon">sunrise_icon</string>
+    <string name="sunset">Sunset</string>
+    <string name="sunset_icon">sunset icon</string>
 </resources>
