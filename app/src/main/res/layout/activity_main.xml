@@ -25,10 +25,13 @@
         app:layout_behavior="@string/appbar_scrolling_view_behavior">
 
         <androidx.fragment.app.FragmentContainerView
-            android:id="@+id/fragment_container_view"
+            android:id="@+id/nav_host_fragment"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:name="com.example.weatherapp.fragments.MainFragment" />
+            android:backgroundTint="@color/pink"
+            app:defaultNavHost="true"
+            android:name="androidx.navigation.fragment.NavHostFragment"
+            app:navGraph="@navigation/nav_graph" />
 
     </androidx.core.widget.NestedScrollView>
 

@@ -6,16 +6,20 @@ import androidx.activity.result.ActivityResultLauncher
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.ViewModelProvider
+import androidx.navigation.fragment.NavHostFragment
 import com.example.weatherapp.data.WeatherRepository
 import com.example.weatherapp.databinding.ActivityMainBinding
-import com.example.weatherapp.fragments.MainFragment
-import com.example.weatherapp.util.managers.LocationManager
+import com.example.weatherapp.util.managers.LocationHelperManager
 
 
 class MainActivity : AppCompatActivity() {
     private lateinit var binding: ActivityMainBinding
     private lateinit var viewModel: MainViewModel
 
+    companion object {
+        const val PREF_TEMPERATURE_UNIT = "temperature unit"
+        const val PREF_TIME_FORMAT = "time format"
+    }
 
     val locationPermissionRequest by lazy {
         initLocationPermissionRequest()
@@ -31,8 +35,12 @@ class MainActivity : AppCompatActivity() {
         setContentView(binding.root)
 
         val modelFactory =
-            MainViewModelFactory(LocationManager(this, locationPermissionRequest), repository)
+            MainViewModelFactory(LocationHelperManager(this, locationPermissionRequest), repository)
         viewModel = ViewModelProvider(this, modelFactory)[MainViewModel::class.java]
+
+        val navHostFragment =
+            supportFragmentManager.findFragmentById(R.id.nav_host_fragment) as NavHostFragment
+        val navController = navHostFragment.navController
 
         initObservers()
 
@@ -45,7 +53,7 @@ class MainActivity : AppCompatActivity() {
                         true
                     }
                     R.id.settings -> {
-                        // write navGraph
+                        navController.navigate(R.id.action_mainFragment_to_settingsFragment)
                         true
                     }
                     else -> false
