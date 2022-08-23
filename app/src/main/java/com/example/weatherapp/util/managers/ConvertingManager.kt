@@ -11,7 +11,6 @@ class ConvertingManager(private val res: Resources) {
         const val M_IN_KM = 1000.0
         const val FORMAT_DOUBLE = "%.1f"
         const val FORMAT_DATE = "dd.MM"
-        const val FORMAT_TIME = "HH:mm"
         const val NIGHT_CHAR = 'n'
         const val UNIX_NUMBER = 1000
         const val RAIN_ICON_LOWER_BOUND = 200
@@ -23,6 +22,9 @@ class ConvertingManager(private val res: Resources) {
         const val CLOUDS_WITH_SUN_ICON = 801
         const val CLOUDS_ICON_LOWER_BOUND = 802
         const val CLOUDS_ICON_UPPER_BOUND = 804
+        const val KELVIN_CONSTANT = 273.15
+        const val FAHRENHEIT_MULTIPLIER = 9 / 5
+        const val FAHRENHEIT_SUMMAND = 32
     }
 
     fun convertVisibility(visibility: Int): String {
@@ -59,7 +61,19 @@ class ConvertingManager(private val res: Resources) {
         return format(unix * UNIX_NUMBER, FORMAT_DATE)
     }
 
-    fun convertTime(unix: Long): String {
-        return format(unix * UNIX_NUMBER, FORMAT_TIME)
+    fun convertTime(timeFormat: String, unix: Long): String {
+        return format(unix * UNIX_NUMBER, timeFormat)
+    }
+
+    fun convertTemp(temperatureUnit: String, temp: Double): Int {
+        return when (temperatureUnit) {
+            "K" -> temp
+            "F" -> convertToFahrenheit(temp)
+            else -> temp - KELVIN_CONSTANT
+        }.toInt()
+    }
+
+    private fun convertToFahrenheit(temp: Double): Double {
+        return (temp - KELVIN_CONSTANT) * FAHRENHEIT_MULTIPLIER + FAHRENHEIT_SUMMAND
     }
 }

@@ -8,14 +8,14 @@
     <string name="humidity">Humidity</string>
     <string name="visibility">Visibility</string>
     <string name="pressure">Pressure</string>
-    <string name="temperature_unit">%1$dK</string>
+    <string name="temperature_unit">%1$d%2$s</string>
     <string name="pressure_unit">%1$d hPa</string>
     <string name="wind_unit">%1$s km/h</string>
     <string name="humidity_unit">%1$d%%</string>
     <string name="visibility_unit_m">%1$d m</string>
     <string name="visibility_unit_km">%1$s km</string>
     <string name="day_time_format">%1$s,  %2$s</string>
-    <string name="feels_like">Feels like %1$dK</string>
+    <string name="feels_like">Feels like %1$d%2$s</string>
     <string name="city_country_format">%1$s,  %2$s</string>
     <string name="no_location_access_granted">Allow using location  to get Weather data</string>
     <string name="only_approximate_location_access_granted">Great! Now, please, try loading weather forecast again</string>
@@ -31,9 +31,30 @@
         <item>Sat</item>
         <item>Sun</item>
     </string-array>
+
+    <string-array name="temperature_units">
+        <item>K</item>
+        <item>F</item>
+        <item>°C</item>
+    </string-array>
+
+
+    <string-array name="time_format">
+        <item>24</item>
+        <item>12</item>
+    </string-array>
+
+    <string-array name="time_format_values">
+        <item>HH:mm</item>
+        <item>h:mmaa</item>
+    </string-array>
+
     <string name="hello_blank_fragment">Hello blank fragment</string>
     <string name="sunrise">Sunrise</string>
     <string name="sunrise_icon">sunrise_icon</string>
     <string name="sunset">Sunset</string>
     <string name="sunset_icon">sunset icon</string>
+    <string name="unit_settings_category">Unit settings</string>
+    <string name="temperature">Temperature</string>
+    <string name="time_format">Time format</string>
 </resources>
