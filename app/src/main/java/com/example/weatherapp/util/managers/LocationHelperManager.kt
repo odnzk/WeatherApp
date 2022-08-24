@@ -18,27 +18,6 @@ class LocationHelperManager(
     private lateinit var locationManager: LocationManager
     private var myLocation: Location? = null
 
-//    @SuppressLint("MissingPermission")
-//    fun getLastKnownLocation(): Task<android.location.Location>? {
-//        if (!PermissionManager(activity, locationPermissionRequest).arePermissionsAllowed(
-//                android.Manifest.permission.ACCESS_COARSE_LOCATION,
-//                android.Manifest.permission.ACCESS_FINE_LOCATION
-//            )
-//        ) {
-//            PermissionManager(activity, locationPermissionRequest).askForPermission(
-//                android.Manifest.permission.ACCESS_COARSE_LOCATION,
-//                android.Manifest.permission.ACCESS_FINE_LOCATION
-//            )
-//            return null
-//        } else {
-//            return LocationServices.getFusedLocationProviderClient(activity).lastLocation
-//                .addOnSuccessListener { l ->
-//                    Location(l.longitude.toInt(), l.latitude.toInt())
-//                }
-//        }
-//    }
-
-
     @SuppressLint("MissingPermission", "ServiceCast")
     fun getLastKnownLocation(): Task<android.location.Location>? {
         if (!PermissionManager(activity, locationPermissionRequest).arePermissionsAllowed(

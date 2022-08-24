@@ -12,7 +12,6 @@
         android:id="@+id/iv_weather"
         android:layout_width="100dp"
         android:layout_height="100dp"
-        android:visibility="gone"
         app:layout_constraintBottom_toTopOf="@id/tv_temperature"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
@@ -24,12 +23,10 @@
         style="@style/Widget.AppCompat.TextView.H1"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:visibility="visible"
         app:layout_constraintBottom_toTopOf="@id/tv_feels_like"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/iv_weather"
-        tools:visibility="gone" />
+        app:layout_constraintTop_toBottomOf="@id/iv_weather" />
 
     <TextView
         android:id="@+id/tv_feels_like"
@@ -37,7 +34,6 @@
         android:textColor="@color/white"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:visibility="gone"
         app:layout_constraintBottom_toTopOf="@id/textClock"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
@@ -52,7 +48,6 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         android:format24Hour="EE, HH:mm"
-        android:visibility="gone"
         app:layout_constraintTop_toBottomOf="@id/tv_feels_like" />
 
     <TextView
@@ -62,7 +57,6 @@
         android:layout_height="wrap_content"
         android:layout_marginTop="25dp"
         android:text="@string/pressure"
-        android:visibility="gone"
         app:layout_constraintEnd_toStartOf="@id/tv_title_wind"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/textClock" />
@@ -73,7 +67,6 @@
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:text="@string/wind"
-        android:visibility="gone"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toEndOf="@id/tv_title_pressure"
         app:layout_constraintTop_toTopOf="@id/tv_title_pressure" />
@@ -84,7 +77,6 @@
         style="@style/Widget.AppCompat.TextView.CenteredWithPaddings"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:visibility="gone"
         app:layout_constraintEnd_toStartOf="@id/tv_title_wind"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/tv_title_pressure" />
@@ -94,7 +86,6 @@
         style="@style/Widget.AppCompat.TextView.CenteredWithPaddings"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:visibility="gone"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toEndOf="@id/tv_pressure"
         app:layout_constraintTop_toTopOf="@id/tv_pressure" />
@@ -106,7 +97,6 @@
         android:layout_height="wrap_content"
         android:layout_marginTop="10dp"
         android:text="@string/humidity"
-        android:visibility="gone"
         app:layout_constraintEnd_toStartOf="@id/tv_title_visibility"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/tv_pressure" />
@@ -117,7 +107,6 @@
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:text="@string/visibility"
-        android:visibility="gone"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toEndOf="@id/tv_title_humidity"
         app:layout_constraintTop_toTopOf="@id/tv_title_humidity" />
@@ -127,7 +116,6 @@
         style="@style/Widget.AppCompat.TextView.CenteredWithPaddings"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:visibility="gone"
         app:layout_constraintEnd_toStartOf="@id/tv_title_visibility"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/tv_title_humidity" />
@@ -148,7 +136,6 @@
         android:layout_height="wrap_content"
         android:layout_marginTop="20dp"
         android:text="@string/sunrise"
-        android:visibility="gone"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/tv_humidity" />
 
@@ -164,7 +151,6 @@
         android:layout_height="wrap_content"
         android:contentDescription="@string/sunrise_icon"
         android:src="@drawable/ic_sunrise"
-        android:visibility="gone"
         app:layout_constraintBottom_toBottomOf="@id/tv_sunrise"
         app:layout_constraintEnd_toEndOf="parent" />
 
@@ -175,7 +161,6 @@
         android:layout_height="wrap_content"
         android:layout_marginTop="10dp"
         android:text="@string/sunset"
-        android:visibility="gone"
         app:layout_constraintStart_toStartOf="@id/tv_sunrise"
         app:layout_constraintTop_toBottomOf="@id/tv_sunrise" />
 
@@ -191,7 +176,6 @@
         android:layout_height="wrap_content"
         android:contentDescription="@string/sunset_icon"
         android:src="@drawable/ic_sunset"
-        android:visibility="gone"
         app:layout_constraintBottom_toBottomOf="@id/tv_sunset"
         app:layout_constraintEnd_toEndOf="parent" />
 
@@ -202,7 +186,6 @@
         android:layout_height="wrap_content"
         android:layout_marginTop="25dp"
         android:orientation="horizontal"
-        android:visibility="gone"
         app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
         app:layout_constraintTop_toBottomOf="@id/tv_sunset"
         app:layout_constraintEnd_toEndOf="parent"
@@ -214,6 +197,7 @@
         style="?android:attr/progressBarStyleLarge"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
