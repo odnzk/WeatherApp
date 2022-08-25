@@ -1,6 +1,7 @@
 package com.example.weatherapp.fragments
 
 import android.os.Bundle
+import android.view.View
 import androidx.preference.DropDownPreference
 import androidx.preference.Preference
 import androidx.preference.PreferenceFragmentCompat

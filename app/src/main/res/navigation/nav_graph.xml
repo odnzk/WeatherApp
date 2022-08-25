@@ -17,5 +17,9 @@
     <fragment
         android:id="@+id/settingsFragment"
         android:name="com.example.weatherapp.fragments.SettingsFragment"
-        android:label="SettingsFragment" />
+        android:label="SettingsFragment" >
+        <action
+            android:id="@+id/action_settingsFragment_to_mainFragment"
+            app:destination="@id/mainFragment" />
+    </fragment>
 </navigation>

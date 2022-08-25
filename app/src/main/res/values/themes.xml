@@ -4,7 +4,7 @@
         <!-- Primary brand color. -->
         <item name="colorPrimary">@color/purple</item>
 
-        <item name="android:background">@color/purple</item>
+<!--        <item name="android:background">@color/purple</item>-->
 
         <item name="colorPrimaryVariant">@color/purple</item>
         <item name="colorOnPrimary">@color/white</item>

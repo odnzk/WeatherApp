@@ -5,11 +5,14 @@ import android.widget.Toast
 import androidx.activity.result.ActivityResultLauncher
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.appcompat.app.AppCompatActivity
+import androidx.appcompat.content.res.AppCompatResources
+import androidx.core.view.children
 import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.fragment.NavHostFragment
 import com.example.weatherapp.data.WeatherRepository
 import com.example.weatherapp.databinding.ActivityMainBinding
 import com.example.weatherapp.util.managers.LocationHelperManager
+import com.google.android.material.appbar.MaterialToolbar
 
 
 class MainActivity : AppCompatActivity() {
@@ -45,6 +48,9 @@ class MainActivity : AppCompatActivity() {
         initObservers()
 
         with(binding) {
+            for (menuItem in topAppBar.menu.children) {
+                menuItem.isVisible = true
+            }
             topAppBar.setOnMenuItemClickListener { menuItem ->
                 when (menuItem.itemId) {
                     R.id.refresh -> {
@@ -54,6 +60,20 @@ class MainActivity : AppCompatActivity() {
                     }
                     R.id.settings -> {
                         navController.navigate(R.id.action_mainFragment_to_settingsFragment)
+                        topAppBar.run {
+                            navigationIcon = AppCompatResources.getDrawable(
+                                this@MainActivity,
+                                R.drawable.ic_baseline_arrow_back_24
+                            )
+                            setNavigationOnClickListener {
+                                navController.navigate(R.id.action_settingsFragment_to_mainFragment)
+                                displayMenuItems(true, topAppBar)
+                                topAppBar.navigationIcon = AppCompatResources.getDrawable(
+                                    this@MainActivity,
+                                    R.drawable.ic_baseline_menu_24
+                                )
+                            }
+                        }
                         true
                     }
                     else -> false
@@ -115,6 +135,7 @@ class MainActivity : AppCompatActivity() {
                 })
         }
     }
+
 }
 
 
