@@ -1,4 +1,4 @@
-# WeatherApp :sunny:
+# WeatherApp
 
 ## About
 WetherApp is an app that receives a five-day weather forecast from <i>OpenWeather</i> and displays it in a convenient format with the ability to customize certain parameters such as temperature unit(K, F, °C) or time format(24, 12)
