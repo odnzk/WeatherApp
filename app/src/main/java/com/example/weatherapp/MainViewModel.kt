@@ -8,6 +8,7 @@ import com.example.weatherapp.data.WeatherRepository
 import com.example.weatherapp.data.response.WeatherForecast
 import com.example.weatherapp.util.managers.LocationHelperManager
 import kotlinx.coroutines.launch
+import kotlin.math.roundToInt
 
 class MainViewModel(
     private val locationManager: LocationHelperManager,
@@ -26,10 +27,9 @@ class MainViewModel(
             it.addOnSuccessListener { location ->
                 viewModelScope.launch {
                     val result = repository.getWeatherForecast(
-                        location.latitude.toInt(),
-                        location.longitude.toInt()
+                        location.latitude.roundToInt(),
+                        location.longitude.roundToInt()
                     )
-//                    Log.d("TAG", Result.success(result).toString())
                     _weatherForecast.value = Result.success(result)
                 }
             }

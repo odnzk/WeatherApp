@@ -6,8 +6,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:padding="20dp"
-    tools:context=".fragments.MainFragment"
-    android:background="@color/purple">
+    tools:context=".fragments.MainFragment">
 
     <com.google.android.material.imageview.ShapeableImageView
         android:id="@+id/iv_weather"
@@ -27,8 +26,7 @@
         app:layout_constraintBottom_toTopOf="@id/tv_feels_like"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/iv_weather"
-        tools:visibility="gone" />
+        app:layout_constraintTop_toBottomOf="@id/iv_weather" />
 
     <TextView
         android:id="@+id/tv_feels_like"
