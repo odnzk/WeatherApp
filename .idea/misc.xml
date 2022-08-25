@@ -9,6 +9,7 @@
         <entry key="app/src/main/res/drawable/ic_moon_new.xml" value="0.1685" />
         <entry key="app/src/main/res/drawable/ic_snow.xml" value="0.1685" />
         <entry key="app/src/main/res/drawable/ic_sun.xml" value="0.1685" />
+        <entry key="app/src/main/res/drawable/translucent_background_style.xml" value="0.1595" />
         <entry key="app/src/main/res/layout/activity_main.xml" value="0.24965893587994542" />
         <entry key="app/src/main/res/layout/fragment_main.xml" value="0.200909423828125" />
         <entry key="app/src/main/res/layout/rvitem_weather.xml" value="0.5067438761393229" />
