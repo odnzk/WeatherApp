@@ -47,7 +47,6 @@ class MainFragment : Fragment() {
             )
         viewModel = ViewModelProvider(this, modelFactory)[MainViewModel::class.java]
 
-        showProgressBar()
         initObserves()
 
         with(binding) {
@@ -63,9 +62,11 @@ class MainFragment : Fragment() {
     }
 
     private fun initObserves() {
+        showProgressBar()
         viewModel.weatherForecast.observe(viewLifecycleOwner) { resWeatherForecast ->
             resWeatherForecast.fold(
                 onSuccess = {
+                    hideProgressBar()
                     setWeatherForecastToUi(it)
                 },
                 onFailure =
@@ -75,7 +76,7 @@ class MainFragment : Fragment() {
         }
     }
 
-    private fun showProgressBar() {
+    fun showProgressBar() {
         for (view in binding.mainCl.children) {
             view.visibility = View.GONE
             if (view.id == R.id.progress_bar) {
@@ -96,8 +97,7 @@ class MainFragment : Fragment() {
     private fun setWeatherForecastToUi(
         weatherForecast: WeatherForecast,
     ) {
-        hideProgressBar()
-
+        
         val sp = PreferenceManager.getDefaultSharedPreferences(requireActivity())
         val temperatureUnit = sp.getString(MainActivity.PREF_TEMPERATURE_UNIT, "").orEmpty()
         val timeFormat = sp.getString(MainActivity.PREF_TIME_FORMAT, "").orEmpty()

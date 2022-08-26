@@ -11,6 +11,7 @@ import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.fragment.NavHostFragment
 import com.example.weatherapp.data.WeatherRepository
 import com.example.weatherapp.databinding.ActivityMainBinding
+import com.example.weatherapp.fragments.MainFragment
 import com.example.weatherapp.fragments.SettingsFragment
 import com.example.weatherapp.util.managers.LocationHelperManager
 
@@ -54,7 +55,14 @@ class MainActivity : AppCompatActivity() {
             topAppBar.setOnMenuItemClickListener { menuItem ->
                 when (menuItem.itemId) {
                     R.id.refresh -> {
-//                        fragmentContainerView.getFragment<MainFragment>().showProgressBar()
+                        navHostFragment.childFragmentManager
+                            .fragments
+                            .first()
+                            .run {
+                                if (this is MainFragment) {
+                                    this.showProgressBar()
+                                }
+                            }
                         viewModel.loadData()
                         true
                     }
