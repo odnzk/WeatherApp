@@ -14,4 +14,17 @@
         android:key="time format"
         android:title="@string/time_format"
         app:useSimpleSummaryProvider="true" />
+
+    <DropDownPreference
+        android:entries="@array/location_service"
+        android:entryValues="@array/location_service_boolean"
+        android:key="location service"
+        android:title="@string/obtaining_location_method"
+        app:useSimpleSummaryProvider="true" />
+
+    <EditTextPreference
+        android:key="location city"
+        android:summary="@string/summary_current_location"
+        android:title="@string/title_current_location"
+        app:useSimpleSummaryProvider="true" />
 </PreferenceScreen>

@@ -9,6 +9,7 @@ import androidx.appcompat.content.res.AppCompatResources
 import androidx.core.view.children
 import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.fragment.NavHostFragment
+import androidx.preference.PreferenceManager
 import com.example.weatherapp.data.WeatherRepository
 import com.example.weatherapp.databinding.ActivityMainBinding
 import com.example.weatherapp.fragments.MainFragment
@@ -161,6 +162,13 @@ class MainActivity : AppCompatActivity() {
                 }
         }
         super.onBackPressed()
+    }
+
+
+    private fun checkLocation(){
+        val isAuto = PreferenceManager.getDefaultSharedPreferences(this).getBoolean(PREF_OBTAINING_LOCATION, true)
+        // if auto -> MainViewModel.loadData()
+        // if manually -> asking city -> getting weather from city, save city somewhere
     }
 }
 
