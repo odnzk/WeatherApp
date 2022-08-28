@@ -43,7 +43,7 @@ class MainFragment : Fragment() {
                 LocationHelperManager(
                     requireActivity(),
                     MainActivity().locationPermissionRequest
-                ), repository
+                ), repository, requireActivity().application
             )
         viewModel = ViewModelProvider(this, modelFactory)[MainViewModel::class.java]
 
@@ -97,10 +97,10 @@ class MainFragment : Fragment() {
     private fun setWeatherForecastToUi(
         weatherForecast: WeatherForecast,
     ) {
-        
+
         val sp = PreferenceManager.getDefaultSharedPreferences(requireActivity())
-        val temperatureUnit = sp.getString(MainActivity.PREF_TEMPERATURE_UNIT, "").orEmpty()
-        val timeFormat = sp.getString(MainActivity.PREF_TIME_FORMAT, "").orEmpty()
+        val temperatureUnit = sp.getString(MainActivity.PREF_TEMPERATURE_UNIT_KEY, "K").orEmpty()
+        val timeFormat = sp.getString(MainActivity.PREF_TIME_FORMAT_KEY, "EE, HH:mm").orEmpty()
 
         with(binding) {
             val converter = ConvertingManager(resources)

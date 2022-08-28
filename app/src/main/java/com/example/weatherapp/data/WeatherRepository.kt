@@ -24,4 +24,8 @@ class WeatherRepository {
     suspend fun getWeatherForecast(latitude: Int, longitude: Int): WeatherForecast {
         return api.getWeatherForecast(latitude, longitude, API_KEY)
     }
+
+    suspend fun getWeatherForecast(cityName: String): WeatherForecast {
+        return api.getWeatherForecast(cityName, API_KEY)
+    }
 }

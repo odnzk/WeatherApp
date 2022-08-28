@@ -6,6 +6,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:padding="20dp"
+    android:background="@color/purple"
     tools:context=".fragments.MainFragment">
 
     <com.google.android.material.imageview.ShapeableImageView
@@ -47,6 +48,7 @@
         android:layout_height="wrap_content"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
+        android:format12Hour="EE, HH:mmaa"
         android:format24Hour="EE, HH:mm"
         app:layout_constraintTop_toBottomOf="@id/tv_feels_like" />
 
@@ -55,7 +57,7 @@
         style="@style/Widget.AppCompat.TextView.H4"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:layout_marginTop="25dp"
+        android:layout_marginTop="@dimen/margin_top"
         android:text="@string/pressure"
         app:layout_constraintEnd_toStartOf="@id/tv_title_wind"
         app:layout_constraintStart_toStartOf="parent"
@@ -134,7 +136,7 @@
         style="@style/Widget.AppCompat.TextView.H3_not_centered"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="20dp"
+        android:layout_marginTop="@dimen/margin_top"
         android:text="@string/sunrise"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/tv_humidity" />
@@ -143,6 +145,7 @@
         android:id="@+id/tv_sunrise"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:textColor="@color/white"
         app:layout_constraintStart_toStartOf="@id/tv_sunrise_title"
         app:layout_constraintTop_toBottomOf="@id/tv_sunrise_title" />
 
@@ -168,6 +171,7 @@
         android:id="@+id/tv_sunset"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:textColor="@color/white"
         app:layout_constraintStart_toStartOf="@id/tv_sunset_title"
         app:layout_constraintTop_toBottomOf="@id/tv_sunset_title" />
 
@@ -184,7 +188,7 @@
         android:id="@+id/rv_weather"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginTop="25dp"
+        android:layout_marginTop="@dimen/margin_top"
         android:orientation="horizontal"
         app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
         app:layout_constraintTop_toBottomOf="@id/tv_sunset"
