@@ -12,9 +12,11 @@
         <entry key="app/src/main/res/drawable/translucent_background_style.xml" value="0.1595" />
         <entry key="app/src/main/res/layout/activity_main.xml" value="0.24965893587994542" />
         <entry key="app/src/main/res/layout/fragment_main.xml" value="0.200909423828125" />
-        <entry key="app/src/main/res/layout/rvitem_weather.xml" value="0.937823486328125" />
+        <entry key="app/src/main/res/layout/location_dialog.xml" value="0.2923492431640625" />
+        <entry key="app/src/main/res/layout/preferences_layout.xml" value="0.18072916666666666" />
+        <entry key="app/src/main/res/layout/rvitem_weather.xml" value="0.6176895141601564" />
         <entry key="app/src/main/res/menu/top_app_bar.xml" value="0.19739583333333333" />
-        <entry key="app/src/main/res/xml/preferences.xml" value="0.43796992481203006" />
+        <entry key="app/src/main/res/xml/preferences.xml" value="0.4763290405273438" />
       </map>
     </option>
   </component>

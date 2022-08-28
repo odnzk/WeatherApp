@@ -46,14 +46,15 @@
     </string-array>
 
     <string-array name="time_format_values">
-        <item>EEEE, HH:mm</item>
-        <item>EEEE, h:mmaa</item>
+        <item>EE, HH:mm</item>
+        <item>EE, h:mmaa</item>
     </string-array>
 
     <string-array name="location_service">
         <item>auto</item>
         <item>manually</item>
     </string-array>
+
     <string-array name="location_service_boolean">
         <item>true</item>
         <item>false</item>
@@ -69,4 +70,5 @@
     <string name="time_format">Time format</string>
     <string name="title_current_location">Current location</string>
     <string name="summary_current_location">Location for weather forecast</string>
+    <string name="weather_icon">weather icon</string>
 </resources>

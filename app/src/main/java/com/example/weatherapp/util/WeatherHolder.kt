@@ -17,9 +17,9 @@ class WeatherHolder(private val binding: RvitemWeatherBinding) :
     fun bind(item: MainInformationAboutDay, res: Resources, sp: SharedPreferences) {
         val converter = ConvertingManager(res)
 
-        val tempUnit = sp.getString(MainActivity.PREF_TEMPERATURE_UNIT, "").orEmpty()
+        val tempUnit = sp.getString(MainActivity.PREF_TEMPERATURE_UNIT_KEY, "").orEmpty()
 
-        val timeFormat = sp.getString(MainActivity.PREF_TIME_FORMAT, "").orEmpty()
+        val timeFormat = sp.getString(MainActivity.PREF_TIME_FORMAT_KEY, "").orEmpty()
 
         with(binding) {
             item.run {

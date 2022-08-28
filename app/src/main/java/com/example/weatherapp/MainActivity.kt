@@ -22,8 +22,10 @@ class MainActivity : AppCompatActivity() {
     private lateinit var viewModel: MainViewModel
 
     companion object {
-        const val PREF_TEMPERATURE_UNIT = "temperature unit"
-        const val PREF_TIME_FORMAT = "time format"
+        const val PREF_TEMPERATURE_UNIT_KEY = "temperature unit"
+        const val PREF_TIME_FORMAT_KEY = "time format"
+        const val PREF_CITY_KEY = "city"
+        const val PREF_COUNTRY_KEY = "country"
     }
 
     val locationPermissionRequest by lazy {
@@ -40,7 +42,11 @@ class MainActivity : AppCompatActivity() {
         setContentView(binding.root)
 
         val modelFactory =
-            MainViewModelFactory(LocationHelperManager(this, locationPermissionRequest), repository)
+            MainViewModelFactory(
+                LocationHelperManager(this, locationPermissionRequest),
+                repository,
+                application
+            )
         viewModel = ViewModelProvider(this, modelFactory)[MainViewModel::class.java]
 
         val navHostFragment =
@@ -80,8 +86,6 @@ class MainActivity : AppCompatActivity() {
                 }
             }
         }
-
-
     }
 
     private fun displayMenuItems(state: Boolean) {
@@ -97,6 +101,11 @@ class MainActivity : AppCompatActivity() {
                 this@MainActivity,
                 if (isFromSetting) R.drawable.ic_baseline_menu_24 else R.drawable.ic_baseline_arrow_back_24
             )
+            title = if (isFromSetting) {
+                getCityFromPreferences()
+            } else {
+                ""
+            }
         }
     }
 
@@ -142,6 +151,7 @@ class MainActivity : AppCompatActivity() {
             resWeatherForecast.fold(
                 onSuccess = {
                     it.city.run {
+                        saveToPreferences(name, country)
                         binding.topAppBar.title =
                             getString(R.string.city_country_format, name, country)
                     }
@@ -150,6 +160,25 @@ class MainActivity : AppCompatActivity() {
                 {
                     Toast.makeText(this, R.string.error_message, Toast.LENGTH_SHORT).show()
                 })
+        }
+    }
+
+    private fun getCityFromPreferences(): String {
+        return PreferenceManager.getDefaultSharedPreferences(this).run {
+            resources.getString(
+                R.string.city_country_format,
+                getString(PREF_CITY_KEY, ""),
+                getString(PREF_COUNTRY_KEY, "")
+            )
+        }
+    }
+
+
+    private fun saveToPreferences(name: String, country: String?) {
+        PreferenceManager.getDefaultSharedPreferences(this).edit().run {
+            putString(PREF_CITY_KEY, name)
+            putString(PREF_COUNTRY_KEY, country)
+            commit()
         }
     }
 
@@ -162,13 +191,6 @@ class MainActivity : AppCompatActivity() {
                 }
         }
         super.onBackPressed()
-    }
-
-
-    private fun checkLocation(){
-        val isAuto = PreferenceManager.getDefaultSharedPreferences(this).getBoolean(PREF_OBTAINING_LOCATION, true)
-        // if auto -> MainViewModel.loadData()
-        // if manually -> asking city -> getting weather from city, save city somewhere
     }
 }
 

@@ -14,11 +14,10 @@ interface Api {
         @Query("appid") apikey: String
     ): WeatherForecast
 
-    // api.openweathermap.org/data/2.5/forecast?q={city name},{country code}&appid={API key}
+    // api.openweathermap.org/data/2.5/forecast?q={city name}&appid={API key}
     @GET("forecast")
     suspend fun getWeatherForecast(
         @Query("q") cityName: String,
-        @Query("q") countryCode: String,
         @Query("appid") apikey: String
     ): WeatherForecast
 

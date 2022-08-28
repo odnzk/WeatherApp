@@ -1,6 +1,8 @@
 package com.example.weatherapp
 
 import android.app.Application
+import android.util.Log
+import android.widget.Toast
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
@@ -29,24 +31,27 @@ class MainViewModel(
 
     fun loadData() {
         val preferences = PreferenceManager.getDefaultSharedPreferences(getApplication())
-        val isAuto = preferences.getBoolean(PREF_OBTAINING_LOCATION, true)
+        val isAuto = preferences.getString(PREF_OBTAINING_LOCATION, "true").toBoolean()
         if (isAuto) {
             loadDataAuto()
         } else {
-            // 1) check if there is a location in preferences
-            // 2) if not  -> use auto location and somehow show message about error or invalid town
-            // 3)
-            loadDataManually()
+            Log.d("TAGTAG", "manually")
+            Log.d("TAGTAG",  PreferenceManager.getDefaultSharedPreferences(getApplication())
+                .getString(MainActivity.PREF_CITY_KEY, "").toString())
+            PreferenceManager.getDefaultSharedPreferences(getApplication())
+                .getString(MainActivity.PREF_CITY_KEY, "")
+                .apply { loadDataManually(this) }
         }
     }
 
-    private fun loadDataManually(cityName: String, countryCode: String) {
-        viewModelScope.launch {
-            val result = repository.getWeatherForecast(
-                cityName,
-                countryCode
-            )
-            _weatherForecast.value = Result.success(result)
+    private fun loadDataManually(cityName: String?) {
+        if (!cityName.isNullOrEmpty()){
+            viewModelScope.launch {
+                val result = repository.getWeatherForecast(
+                    cityName,
+                )
+                _weatherForecast.value = Result.success(result)
+            }
         }
     }
 
