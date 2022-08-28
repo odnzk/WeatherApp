@@ -14,23 +14,23 @@ import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.RecyclerView
 import com.example.weatherapp.MainActivity
 import com.example.weatherapp.MainViewModel
-import com.example.weatherapp.MainViewModelFactory
 import com.example.weatherapp.R
 import com.example.weatherapp.data.WeatherRepository
 import com.example.weatherapp.data.response.WeatherForecast
 import com.example.weatherapp.databinding.FragmentMainBinding
 import com.example.weatherapp.util.WeatherForecastAdapter
 import com.example.weatherapp.util.managers.ConvertingManager
-import com.example.weatherapp.util.managers.LocationHelperManager
+import dagger.hilt.android.AndroidEntryPoint
+import javax.inject.Inject
 
+@AndroidEntryPoint
 class MainFragment : Fragment() {
     private var _binding: FragmentMainBinding? = null
     private val binding get() = _binding!!
     private lateinit var viewModel: MainViewModel
 
-    private val repository by lazy {
-        WeatherRepository()
-    }
+    @Inject
+    lateinit var repository: WeatherRepository
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -38,14 +38,8 @@ class MainFragment : Fragment() {
     ): View {
         _binding = FragmentMainBinding.inflate(inflater, container, false)
 
-        val modelFactory =
-            MainViewModelFactory(
-                LocationHelperManager(
-                    requireActivity(),
-                    MainActivity().locationPermissionRequest
-                ), repository, requireActivity().application
-            )
-        viewModel = ViewModelProvider(this, modelFactory)[MainViewModel::class.java]
+        viewModel =
+            ViewModelProvider(requireActivity())[MainViewModel::class.java]
 
         initObserves()
 
@@ -78,7 +72,7 @@ class MainFragment : Fragment() {
 
     fun showProgressBar() {
         for (view in binding.mainCl.children) {
-            view.visibility = View.GONE
+            view.visibility = View.INVISIBLE
             if (view.id == R.id.progress_bar) {
                 (view as ContentLoadingProgressBar).show()
             }
@@ -125,8 +119,8 @@ class MainFragment : Fragment() {
                 ivWeather.setImageResource(converter.convertIcon(weather[0].id, weather[0].icon))
             }
             weatherForecast.city.run {
-                tvSunrise.text = converter.convertTime(timeFormat, sunrise.toLong())
-                tvSunset.text = converter.convertTime(timeFormat, sunset.toLong())
+                tvSunrise.text = converter.convertTime(timeFormat.split(", ")[1], sunrise.toLong())
+                tvSunset.text = converter.convertTime(timeFormat.split(", ")[1], sunset.toLong())
             }
 
             textClock.format24Hour = timeFormat

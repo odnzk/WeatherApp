@@ -16,6 +16,7 @@
         android:title="@string/time_format"
         app:useSimpleSummaryProvider="true" />
 
+
     <DropDownPreference
         android:entries="@array/location_service"
         android:entryValues="@array/location_service_boolean"
@@ -28,4 +29,5 @@
         android:summary="@string/summary_current_location"
         android:title="@string/title_current_location"
         app:useSimpleSummaryProvider="true" />
+
 </PreferenceScreen>

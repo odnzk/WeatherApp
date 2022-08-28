@@ -60,7 +60,6 @@
         <item>false</item>
     </string-array>
 
-    <string name="hello_blank_fragment">Hello blank fragment</string>
     <string name="sunrise">Sunrise</string>
     <string name="sunrise_icon">sunrise_icon</string>
     <string name="sunset">Sunset</string>

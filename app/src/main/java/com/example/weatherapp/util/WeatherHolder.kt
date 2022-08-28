@@ -19,7 +19,8 @@ class WeatherHolder(private val binding: RvitemWeatherBinding) :
 
         val tempUnit = sp.getString(MainActivity.PREF_TEMPERATURE_UNIT_KEY, "").orEmpty()
 
-        val timeFormat = sp.getString(MainActivity.PREF_TIME_FORMAT_KEY, "").orEmpty()
+        val timeFormat =
+            sp.getString(MainActivity.PREF_TIME_FORMAT_KEY, "").orEmpty().split(", ")[1]
 
         with(binding) {
             item.run {

@@ -1,8 +1,6 @@
 package com.example.weatherapp
 
 import android.app.Application
-import android.util.Log
-import android.widget.Toast
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
@@ -25,6 +23,7 @@ class MainViewModel(
     private val _weatherForecast = MutableLiveData<Result<WeatherForecast>>()
     val weatherForecast: LiveData<Result<WeatherForecast>> = _weatherForecast
 
+
     init {
         loadData()
     }
@@ -35,12 +34,11 @@ class MainViewModel(
         if (isAuto) {
             loadDataAuto()
         } else {
-            Log.d("TAGTAG", "manually")
-            Log.d("TAGTAG",  PreferenceManager.getDefaultSharedPreferences(getApplication())
-                .getString(MainActivity.PREF_CITY_KEY, "").toString())
             PreferenceManager.getDefaultSharedPreferences(getApplication())
-                .getString(MainActivity.PREF_CITY_KEY, "")
-                .apply { loadDataManually(this) }
+                .getString(MainActivity.PREF_CITY_KEY, " ")
+                ?.apply {
+                    loadDataManually(this.split(" ")[0].replace(",", "").trim())
+                }
         }
     }
 

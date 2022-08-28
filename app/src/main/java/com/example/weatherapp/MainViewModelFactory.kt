@@ -14,7 +14,7 @@ class MainViewModelFactory(
 
     override fun <T : ViewModel> create(modelClass: Class<T>): T {
         return MainViewModel(
-            locationManager,
-            repository, application) as T
+            locationManager, repository, application
+        ) as T
     }
 }
