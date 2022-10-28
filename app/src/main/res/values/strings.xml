@@ -20,8 +20,10 @@
     <string name="no_location_access_granted">Allow using location  to get Weather data</string>
     <string name="only_approximate_location_access_granted">Great! Now, please, try loading weather forecast again</string>
     <string name="precise_location_access_granted">Great! Now, please, try loading weather forecast again</string>
+
     <string name="error_message">Error, please try again</string>
     <string name="obtaining_location_method">Obtaining a location</string>
+
 
     <string-array name="days_of_week">
         <item>Mon</item>
@@ -70,4 +72,5 @@
     <string name="title_current_location">Current location</string>
     <string name="summary_current_location">Location for weather forecast</string>
     <string name="weather_icon">weather icon</string>
+    <string name="weather_condition_image">weather condition image</string>
 </resources>

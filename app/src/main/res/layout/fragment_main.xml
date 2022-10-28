@@ -9,15 +9,18 @@
     android:background="@color/purple"
     tools:context=".fragments.MainFragment">
 
-    <com.google.android.material.imageview.ShapeableImageView
+    <ImageView
+        android:contentDescription="@string/weather_condition_image"
         android:id="@+id/iv_weather"
+        android:src="@drawable/ic_baseline_settings_24"
+        android:adjustViewBounds="true"
+        android:scaleType="fitCenter"
         android:layout_width="100dp"
-        android:layout_height="100dp"
+        android:layout_height="wrap_content"
         app:layout_constraintBottom_toTopOf="@id/tv_temperature"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        tools:ignore="ImageContrastCheck" />
+        app:layout_constraintTop_toTopOf="parent" />
 
     <TextView
         android:id="@+id/tv_temperature"

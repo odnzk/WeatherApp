@@ -5,18 +5,18 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:background="@color/purple">
 
-    <com.google.android.material.appbar.AppBarLayout
-        android:layout_height="wrap_content"
-        android:layout_width="match_parent">
+    <!--    <com.google.android.material.appbar.AppBarLayout-->
+    <!--        android:layout_height="wrap_content"-->
+    <!--        android:layout_width="match_parent">-->
 
-        <com.google.android.material.appbar.MaterialToolbar
-            style="@style/Widget.MaterialComponents.Toolbar.Primary"
-            android:id="@+id/topAppBar"
-            android:layout_height="?attr/actionBarSize"
-            android:layout_width="match_parent"
-            app:menu="@menu/top_app_bar"
-            app:title="@string/app_name" />
-    </com.google.android.material.appbar.AppBarLayout>
+    <!--        <com.google.android.material.appbar.MaterialToolbar-->
+    <!--            style="@style/Widget.MaterialComponents.Toolbar.Primary"-->
+    <!--            android:id="@+id/topAppBar"-->
+    <!--            android:layout_height="?attr/actionBarSize"-->
+    <!--            android:layout_width="match_parent"-->
+    <!--            app:menu="@menu/top_app_bar"-->
+    <!--            app:title="@string/app_name" />-->
+    <!--    </com.google.android.material.appbar.AppBarLayout>-->
 
     <androidx.core.widget.NestedScrollView
         android:layout_height="match_parent"

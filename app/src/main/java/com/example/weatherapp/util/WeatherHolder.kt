@@ -1,47 +1,36 @@
 package com.example.weatherapp.util
 
-import android.content.SharedPreferences
-import android.content.res.Resources
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
-import com.example.weatherapp.MainActivity
 import com.example.weatherapp.R
 import com.example.weatherapp.data.response.MainInformationAboutDay
 import com.example.weatherapp.databinding.RvitemWeatherBinding
+import com.example.weatherapp.extensions.setWeatherIcon
 import com.example.weatherapp.util.managers.ConvertingManager
 
 class WeatherHolder(private val binding: RvitemWeatherBinding) :
     RecyclerView.ViewHolder(binding.root) {
 
-    fun bind(item: MainInformationAboutDay, res: Resources, sp: SharedPreferences) {
-        val converter = ConvertingManager(res)
+    private val converter = ConvertingManager(binding.root.resources)
 
-        val tempUnit = sp.getString(MainActivity.PREF_TEMPERATURE_UNIT_KEY, "").orEmpty()
-
-        val timeFormat =
-            sp.getString(MainActivity.PREF_TIME_FORMAT_KEY, "").orEmpty().split(", ")[1]
-
+    fun bind(item: MainInformationAboutDay, temperatureUnit: String, timeFormat: String) {
+        val res = itemView.context.resources
         with(binding) {
             item.run {
                 main.run {
                     tvTemperature.text = res.getString(
                         R.string.temperature_unit,
-                        converter.convertTemp(tempUnit, temp),
-                        tempUnit
+                        converter.convertTemp(temperatureUnit, temp),
+                        temperatureUnit
                     )
                     tvTitleHumidity.text = res.getString(R.string.humidity_unit, humidity)
                 }
                 dt.run {
-                    tvTime.text = converter.convertTime(timeFormat, this)
-                    tvDate.text = converter.convertDate(this)
+                    tvTime.text = converter.convertTimeToString(timeFormat, this)
+                    tvDate.text = converter.convertDateToString(this)
                 }
-                ivWeather.setImageResource(
-                    converter.convertIcon(
-                        item.weather[0].id,
-                        item.weather[0].icon
-                    )
-                )
+                ivWeather.setWeatherIcon(item.weather[0].id, item.weather[0].icon)
             }
         }
     }

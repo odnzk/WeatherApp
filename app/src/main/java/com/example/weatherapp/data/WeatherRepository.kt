@@ -2,7 +2,7 @@ package com.example.weatherapp.data
 
 import com.example.weatherapp.data.response.WeatherForecast
 
-private const val API_KEY = "7772c8e5d929dc484f8137d8cf85e7fb"
+private const val API_KEY = "b65750fa8912403310944973c7362a56"
 
 class WeatherRepository(private val api: Api) {
 

@@ -23,7 +23,6 @@ class MainViewModel(
     private val _weatherForecast = MutableLiveData<Result<WeatherForecast>>()
     val weatherForecast: LiveData<Result<WeatherForecast>> = _weatherForecast
 
-
     init {
         loadData()
     }
