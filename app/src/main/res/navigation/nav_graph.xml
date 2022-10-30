@@ -8,7 +8,7 @@
     <fragment
         android:id="@+id/mainFragment"
         android:name="com.example.weatherapp.fragments.MainFragment"
-        android:label="fragment_main"
+        android:label="Home"
         tools:layout="@layout/fragment_main" >
         <action
             android:id="@+id/action_mainFragment_to_settingsFragment"
@@ -17,7 +17,7 @@
     <fragment
         android:id="@+id/settingsFragment"
         android:name="com.example.weatherapp.fragments.SettingsFragment"
-        android:label="SettingsFragment">
+        android:label="Settings">
         <action
             android:id="@+id/action_settingsFragment_to_mainFragment"
             app:destination="@id/mainFragment"

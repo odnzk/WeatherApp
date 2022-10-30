@@ -3,12 +3,15 @@ package com.example.weatherapp
 import android.Manifest
 import android.os.Bundle
 import android.util.Log
+import android.view.Menu
+import android.view.MenuItem
 import android.widget.Toast
 import androidx.activity.result.ActivityResultLauncher
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
 import androidx.navigation.NavController
+import androidx.navigation.findNavController
 import androidx.navigation.fragment.NavHostFragment
 import androidx.navigation.ui.AppBarConfiguration
 import androidx.navigation.ui.setupActionBarWithNavController
@@ -22,7 +25,6 @@ import javax.inject.Inject
 class MainActivity : AppCompatActivity() {
     private lateinit var binding: ActivityMainBinding
 
-    private lateinit var fusedLocationClient: FusedLocationProviderClient
 
     private val viewModel: MainViewModel by viewModels {
         MainViewModelFactory(
@@ -63,12 +65,15 @@ class MainActivity : AppCompatActivity() {
         // already has the permissions, and whether your app needs to show a permission
         // rationale dialog. For more details, see Request permissions.
 
-        setUpNavigation() // todo
-
+        setUpNavigation()
     }
 
+    override fun onCreateOptionsMenu(menu: Menu?): Boolean {
+        menuInflater.inflate(R.menu.top_app_bar, menu)
+        return true
+    }
 
-    private fun setUpNavigation(){
+    private fun setUpNavigation() {
         val navHostFragment =
             supportFragmentManager.findFragmentById(R.id.nav_host_fragment) as NavHostFragment
         val navController: NavController = navHostFragment.navController
@@ -77,13 +82,11 @@ class MainActivity : AppCompatActivity() {
             topLevelDestinationIds = setOf(R.id.mainFragment),
             fallbackOnNavigateUpListener = ::onSupportNavigateUp
         )
-        // todo
-//        setSupportActionBar(binding.toolbar)
-//        setupActionBarWithNavController(
-//            navController = navController,
-//            configuration = appBarConfiguration
-//        )
-//        setupActionBarWithNavController(navController)
+        setSupportActionBar(binding.toolbar)
+        setupActionBarWithNavController(
+            navController = navController,
+            configuration = appBarConfiguration
+        )
     }
 
     private fun initLocationPermissionRequest(): ActivityResultLauncher<Array<String>> {
@@ -122,22 +125,17 @@ class MainActivity : AppCompatActivity() {
         }
     }
 
-    //    private fun initObservers(){
-//        viewModel.weatherForecast.observe(this){ resWeatherForecast ->
-//            resWeatherForecast.fold(
-//                onSuccess = {
-//                    it.city.run {
-//                        saveToPreferences(name, country)
-//                    }
-//                },
-//                onFailure =
-//                {
-//                    Toast.makeText(this, R.string.error_message, Toast.LENGTH_SHORT).show()
-//                })
-//        }
-//    }
-//
-//    private fun saveToPreferences(city: String, country: String?) {
+    override fun onOptionsItemSelected(item: MenuItem): Boolean {
+        when(item.itemId){
+            R.id.refresh -> viewModel.loadData()
+            R.id.settingsFragment ->
+                findNavController(R.id.nav_host_fragment).navigate(R.id.action_mainFragment_to_settingsFragment)
+            android.R.id.home ->  findNavController(R.id.nav_host_fragment).navigate(R.id.action_settingsFragment_to_mainFragment)
+        }
+        return super.onOptionsItemSelected(item)
+    }
+
+    //    private fun saveToPreferences(city: String, country: String?) {
 //        PreferenceManager.getDefaultSharedPreferences(this@MainActivity).edit().run {
 //            if (country == null) {
 //                putString(PREF_CITY_KEY, city)

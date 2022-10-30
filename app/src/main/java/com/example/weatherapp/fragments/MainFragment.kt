@@ -7,6 +7,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
+import androidx.appcompat.app.AppCompatActivity
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
 import androidx.core.view.children
@@ -24,6 +25,7 @@ import com.example.weatherapp.data.WeatherRepository
 import com.example.weatherapp.data.response.MainInformationAboutDay
 import com.example.weatherapp.data.response.WeatherForecast
 import com.example.weatherapp.databinding.FragmentMainBinding
+import com.example.weatherapp.exceptions.LocationPermissionDeniedException
 import com.example.weatherapp.extensions.setWeatherIcon
 import com.example.weatherapp.util.WeatherForecastAdapter
 import com.example.weatherapp.util.managers.ConvertingManager
@@ -47,6 +49,7 @@ class MainFragment : Fragment() {
     ): View {
         _binding = FragmentMainBinding.inflate(inflater, container, false)
 
+        showProgressBar()
         val factory = MainViewModelFactory(repository, application = requireActivity().application)
         viewModel = ViewModelProvider(this, factory).get(MainViewModel::class.java)
         initObserves()
@@ -55,20 +58,32 @@ class MainFragment : Fragment() {
     }
 
     private fun initObserves() {
-        showProgressBar()
         viewModel.weatherForecast.observe(viewLifecycleOwner) { resWeatherForecast ->
             resWeatherForecast.fold(
                 onSuccess = {
                     hideProgressBar()
+                    showActionBarTitle(it.city.name, it.city.country)
                     setWeatherForecastToUi(it)
                 },
                 onFailure =
                 {
                     // todo request permissions
-                    requestLocationPermissions()
-                    Toast.makeText(context, R.string.error_message, Toast.LENGTH_SHORT).show()
+                    if (it is LocationPermissionDeniedException) {
+                        requestLocationPermissions()
+                    } else {
+                        Toast.makeText(context, R.string.error_message, Toast.LENGTH_SHORT).show()
+                    }
                 })
         }
+    }
+
+    private fun showActionBarTitle(city: String, country: String) {
+        (activity as? AppCompatActivity)?.supportActionBar?.title =
+            getString(
+                R.string.city_country_format,
+                city,
+                country
+            )
     }
 
     private fun requestLocationPermissions() {
@@ -95,7 +110,6 @@ class MainFragment : Fragment() {
                     getString(R.string.error_message),
                     Toast.LENGTH_SHORT
                 )
-//            showInContextUI(...)
             }
             else -> {
                 // You can directly ask for the permission.

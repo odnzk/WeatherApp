@@ -21,7 +21,7 @@
     <string name="only_approximate_location_access_granted">Great! Now, please, try loading weather forecast again</string>
     <string name="precise_location_access_granted">Great! Now, please, try loading weather forecast again</string>
 
-    <string name="error_message">Error, please try again</string>
+    <string name="error_message">Error, please reopen app</string>
     <string name="obtaining_location_method">Obtaining a location</string>
 
 
