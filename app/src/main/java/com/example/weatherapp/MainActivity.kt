@@ -1,116 +1,96 @@
 package com.example.weatherapp
 
+import android.Manifest
 import android.os.Bundle
+import android.util.Log
 import android.widget.Toast
 import androidx.activity.result.ActivityResultLauncher
 import androidx.activity.result.contract.ActivityResultContracts
+import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
-import androidx.lifecycle.ViewModelProvider
+import androidx.navigation.NavController
 import androidx.navigation.fragment.NavHostFragment
+import androidx.navigation.ui.AppBarConfiguration
 import androidx.navigation.ui.setupActionBarWithNavController
-import androidx.preference.PreferenceManager
 import com.example.weatherapp.data.WeatherRepository
 import com.example.weatherapp.databinding.ActivityMainBinding
-import com.example.weatherapp.util.managers.LocationHelperManager
+import com.google.android.gms.location.FusedLocationProviderClient
 import dagger.hilt.android.AndroidEntryPoint
 import javax.inject.Inject
 
 @AndroidEntryPoint
 class MainActivity : AppCompatActivity() {
     private lateinit var binding: ActivityMainBinding
-    private lateinit var viewModel: MainViewModel
+
+    private lateinit var fusedLocationClient: FusedLocationProviderClient
+
+    private val viewModel: MainViewModel by viewModels {
+        MainViewModelFactory(
+            repository,
+            application
+        )
+    }
 
     @Inject
     lateinit var repository: WeatherRepository
 
-    companion object {
-        const val PREF_TEMPERATURE_UNIT_KEY = "temperature unit"
-        const val PREF_TIME_FORMAT_KEY = "time format"
-        const val PREF_CITY_KEY = "location city"
-        const val PREF_IS_AUTO = "location service"
-        val DEFAULT_TEMPERATURE_UNIT = "K"
-        val DEFAULT_TIMEFORMAT = "EE, HH:mm"
-    }
-
-    private val locationPermissionRequest by lazy {
-        initLocationPermissionRequest()
-    }
+    private val locationPermissionRequest by lazy(::initLocationPermissionRequest)
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
-        val modelFactory =
-            MainViewModelFactory(
-                LocationHelperManager(this, locationPermissionRequest),
-                repository,
-                application
-            )
-        viewModel = ViewModelProvider(this, modelFactory)[MainViewModel::class.java]
-
-        val navHostFragment =
-            supportFragmentManager.findFragmentById(R.id.nav_host_fragment) as NavHostFragment
-        val navController = navHostFragment.navController
-
-        initObservers()
-
-        setupActionBarWithNavController(navController)
-
-        with(binding) {
-//            for (menuItem in actionBar.menu.children) {
-//                menuItem.isVisible = true
-//            }
-//            topAppBar.setOnMenuItemClickListener { menuItem ->
-//                when (menuItem.itemId) {
-//                    R.id.refresh -> {
-//                        navHostFragment.childFragmentManager
-//                            .fragments
-//                            .first()
-//                            .run {
-//                                if (this is MainFragment) {
-//                                    this.showProgressBar()
-//                                }
-//                            }
-//                        viewModel.loadData()
-//                        true
-//                    }
-//                    R.id.settingsFragment -> {
-////                        manageToolBar(false)
-//                        navController.navigate(R.id.action_mainFragment_to_settingsFragment)
-//                        // ???
-////                        topAppBar.setNavigationOnClickListener {
-//////                            manageToolBar(true)
-////                            navController.navigate(R.id.action_settingsFragment_to_mainFragment)
-////                        }
-//                        true
-//                    }
-//                    else -> false
-//                } }
+        val locationPermissionRequest = registerForActivityResult(
+            ActivityResultContracts.RequestMultiplePermissions()
+        ) { permissions ->
+            when {
+                permissions.getOrDefault(Manifest.permission.ACCESS_FINE_LOCATION, false) -> {
+                    // Precise location access granted.
+                    Log.d("TAGTAG", "permissions granted")
+                }
+                permissions.getOrDefault(Manifest.permission.ACCESS_COARSE_LOCATION, false) -> {
+                    // Only approximate location access granted.
+                    Log.d("TAGTAG", "")
+                }
+                else -> {
+                    // No location access granted.
+                    Log.d("TAGTAG", "")
+                }
+            }
         }
+        // Before you perform the actual permission request, check whether your app
+        // already has the permissions, and whether your app needs to show a permission
+        // rationale dialog. For more details, see Request permissions.
+
+        setUpNavigation() // todo
+
     }
 
-//    private fun displayMenuItems(state: Boolean) {
-//        binding.topAppBar.menu.children.forEach { item ->
-//            item.isVisible = state
-//        }
-//    }
 
-//    private fun manageToolBar(isFromSetting: Boolean) {
-//        displayMenuItems(isFromSetting)
-//        binding.topAppBar.run {
-//            navigationIcon = AppCompatResources.getDrawable(
-//                this@MainActivity,
-//                if (isFromSetting) R.drawable.ic_baseline_menu_24 else R.drawable.ic_baseline_arrow_back_24
-//            )
-//        }
-//    }
+    private fun setUpNavigation(){
+        val navHostFragment =
+            supportFragmentManager.findFragmentById(R.id.nav_host_fragment) as NavHostFragment
+        val navController: NavController = navHostFragment.navController
+
+        val appBarConfiguration = AppBarConfiguration(
+            topLevelDestinationIds = setOf(R.id.mainFragment),
+            fallbackOnNavigateUpListener = ::onSupportNavigateUp
+        )
+        // todo
+//        setSupportActionBar(binding.toolbar)
+//        setupActionBarWithNavController(
+//            navController = navController,
+//            configuration = appBarConfiguration
+//        )
+//        setupActionBarWithNavController(navController)
+    }
 
     private fun initLocationPermissionRequest(): ActivityResultLauncher<Array<String>> {
         return registerForActivityResult(ActivityResultContracts.RequestMultiplePermissions()) { permissions ->
             when {
                 permissions.getOrDefault(
-                    android.Manifest.permission.ACCESS_FINE_LOCATION,
+                    Manifest.permission.ACCESS_FINE_LOCATION,
                     false
                 ) -> {
                     // Precise location access granted.
@@ -121,7 +101,7 @@ class MainActivity : AppCompatActivity() {
                     ).show()
                 }
                 permissions.getOrDefault(
-                    android.Manifest.permission.ACCESS_COARSE_LOCATION,
+                    Manifest.permission.ACCESS_COARSE_LOCATION,
                     false
                 ) -> {
                     // Only approximate location access granted.
@@ -137,53 +117,48 @@ class MainActivity : AppCompatActivity() {
                         getString(R.string.no_location_access_granted),
                         Toast.LENGTH_SHORT
                     ).show()
-                    // No location access granted.
                 }
             }
         }
     }
 
-    private fun initObservers(){
-        viewModel.weatherForecast.observe(this){ resWeatherForecast ->
-            resWeatherForecast.fold(
-                onSuccess = {
-                    it.city.run {
-                        saveToPreferences(name, country)
-//                        binding.topAppBar.title =
-//                            getString(R.string.city_country_format, name, country)
-                    }
-                },
-                onFailure =
-                {
-                    Toast.makeText(this, R.string.error_message, Toast.LENGTH_SHORT).show()
-                })
-        }
-    }
-
-    private fun saveToPreferences(city: String, country: String?) {
-        PreferenceManager.getDefaultSharedPreferences(this@MainActivity).edit().run {
-            if (country == null) {
-                putString(PREF_CITY_KEY, city)
-            } else {
-                putString(
-                    PREF_CITY_KEY,
-                    resources.getString(R.string.city_country_format, city, country)
-                )
-            }
-            apply()
-        }
-    }
-
-//    override fun onBackPressed() {
-//        val fragmentContainer = this.supportFragmentManager.findFragmentById(R.id.nav_host_fragment)
-//        if (fragmentContainer is NavHostFragment) {
-//            fragmentContainer.childFragmentManager.fragments.first()
-//                .takeIf { it is SettingsFragment }?.let {
-//                    manageToolBar(true)
-//                }
+    //    private fun initObservers(){
+//        viewModel.weatherForecast.observe(this){ resWeatherForecast ->
+//            resWeatherForecast.fold(
+//                onSuccess = {
+//                    it.city.run {
+//                        saveToPreferences(name, country)
+//                    }
+//                },
+//                onFailure =
+//                {
+//                    Toast.makeText(this, R.string.error_message, Toast.LENGTH_SHORT).show()
+//                })
 //        }
-//        super.onBackPressed()
 //    }
+//
+//    private fun saveToPreferences(city: String, country: String?) {
+//        PreferenceManager.getDefaultSharedPreferences(this@MainActivity).edit().run {
+//            if (country == null) {
+//                putString(PREF_CITY_KEY, city)
+//            } else {
+//                putString(
+//                    PREF_CITY_KEY,
+//                    resources.getString(R.string.city_country_format, city, country)
+//                )
+//            }
+//            apply()
+//        }
+//    }
+//
+    companion object {
+        const val PREF_TEMPERATURE_UNIT_KEY = "temperature unit"
+        const val PREF_TIME_FORMAT_KEY = "time format"
+        const val PREF_CITY_KEY = "location city"
+        const val PREF_IS_AUTO = "location service"
+        const val DEFAULT_TEMPERATURE_UNIT = "K"
+        const val DEFAULT_TIMEFORMAT = "EE, HH:mm"
+    }
 }
 
 

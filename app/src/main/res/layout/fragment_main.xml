@@ -12,7 +12,7 @@
     <ImageView
         android:contentDescription="@string/weather_condition_image"
         android:id="@+id/iv_weather"
-        android:src="@drawable/ic_baseline_settings_24"
+        android:src="@drawable/ic_sun"
         android:adjustViewBounds="true"
         android:scaleType="fitCenter"
         android:layout_width="100dp"
@@ -26,6 +26,7 @@
         android:id="@+id/tv_temperature"
         style="@style/Widget.AppCompat.TextView.H1"
         android:layout_width="wrap_content"
+        tools:text="234 K"
         android:layout_height="wrap_content"
         app:layout_constraintBottom_toTopOf="@id/tv_feels_like"
         app:layout_constraintEnd_toEndOf="parent"
@@ -38,6 +39,7 @@
         android:textColor="@color/white"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        tools:text="Feels like 234 K"
         app:layout_constraintBottom_toTopOf="@id/textClock"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
@@ -49,6 +51,7 @@
         android:layout_width="wrap_content"
         style="@style/Widget.AppCompat.TextView.TextClock"
         android:layout_height="wrap_content"
+        tools:text="Mon, 23:59"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         android:format12Hour="EE, HH:mmaa"
@@ -82,6 +85,7 @@
         style="@style/Widget.AppCompat.TextView.CenteredWithPaddings"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
+        tools:text="1014"
         app:layout_constraintEnd_toStartOf="@id/tv_title_wind"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/tv_title_pressure" />
@@ -91,6 +95,7 @@
         style="@style/Widget.AppCompat.TextView.CenteredWithPaddings"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
+        tools:text="10km/h"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toEndOf="@id/tv_pressure"
         app:layout_constraintTop_toTopOf="@id/tv_pressure" />
@@ -120,6 +125,7 @@
         android:id="@+id/tv_humidity"
         style="@style/Widget.AppCompat.TextView.CenteredWithPaddings"
         android:layout_width="0dp"
+        tools:text="90%"
         android:layout_height="wrap_content"
         app:layout_constraintEnd_toStartOf="@id/tv_title_visibility"
         app:layout_constraintStart_toStartOf="parent"
@@ -129,6 +135,7 @@
         android:id="@+id/tv_visibility"
         style="@style/Widget.AppCompat.TextView.CenteredWithPaddings"
         android:layout_width="0dp"
+        tools:text="moderate"
         android:layout_height="wrap_content"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toEndOf="@id/tv_humidity"
@@ -149,6 +156,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:textColor="@color/white"
+        tools:text="10:14"
         app:layout_constraintStart_toStartOf="@id/tv_sunrise_title"
         app:layout_constraintTop_toBottomOf="@id/tv_sunrise_title" />
 
@@ -172,6 +180,7 @@
 
     <TextView
         android:id="@+id/tv_sunset"
+        tools:text="22:14"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:textColor="@color/white"

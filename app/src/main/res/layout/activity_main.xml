@@ -1,27 +1,25 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.coordinatorlayout.widget.CoordinatorLayout android:layout_height="match_parent"
+<LinearLayout android:layout_height="match_parent"
+    android:fitsSystemWindows="true"
     android:layout_width="match_parent"
+    android:orientation="vertical"
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:background="@color/purple">
 
-    <!--    <com.google.android.material.appbar.AppBarLayout-->
-    <!--        android:layout_height="wrap_content"-->
-    <!--        android:layout_width="match_parent">-->
-
-    <!--        <com.google.android.material.appbar.MaterialToolbar-->
-    <!--            style="@style/Widget.MaterialComponents.Toolbar.Primary"-->
-    <!--            android:id="@+id/topAppBar"-->
-    <!--            android:layout_height="?attr/actionBarSize"-->
-    <!--            android:layout_width="match_parent"-->
-    <!--            app:menu="@menu/top_app_bar"-->
-    <!--            app:title="@string/app_name" />-->
-    <!--    </com.google.android.material.appbar.AppBarLayout>-->
+    <androidx.appcompat.widget.Toolbar
+        android:id="@+id/toolbar"
+        style="@style/Widget.MaterialComponents.Toolbar.Primary"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:elevation="4dp"
+        app:menu="@menu/top_app_bar"
+        app:popupTheme="@style/ThemeOverlay.AppCompat.Light"
+        app:title="@string/app_name" />
 
     <androidx.core.widget.NestedScrollView
         android:layout_height="match_parent"
-        android:layout_width="match_parent"
-        app:layout_behavior="@string/appbar_scrolling_view_behavior">
+        android:layout_width="match_parent">
 
         <androidx.fragment.app.FragmentContainerView
             android:id="@+id/nav_host_fragment"
@@ -33,5 +31,4 @@
             app:navGraph="@navigation/nav_graph" />
 
     </androidx.core.widget.NestedScrollView>
-
-</androidx.coordinatorlayout.widget.CoordinatorLayout>
+</LinearLayout>

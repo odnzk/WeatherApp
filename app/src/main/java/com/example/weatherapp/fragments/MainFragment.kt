@@ -1,10 +1,14 @@
 package com.example.weatherapp.fragments
 
+import android.Manifest
+import android.content.pm.PackageManager
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
+import androidx.core.app.ActivityCompat
+import androidx.core.content.ContextCompat
 import androidx.core.view.children
 import androidx.core.widget.ContentLoadingProgressBar
 import androidx.fragment.app.Fragment
@@ -14,6 +18,7 @@ import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.RecyclerView
 import com.example.weatherapp.MainActivity
 import com.example.weatherapp.MainViewModel
+import com.example.weatherapp.MainViewModelFactory
 import com.example.weatherapp.R
 import com.example.weatherapp.data.WeatherRepository
 import com.example.weatherapp.data.response.MainInformationAboutDay
@@ -41,8 +46,9 @@ class MainFragment : Fragment() {
         savedInstanceState: Bundle?
     ): View {
         _binding = FragmentMainBinding.inflate(inflater, container, false)
-        viewModel = ViewModelProvider(requireActivity())[MainViewModel::class.java]
 
+        val factory = MainViewModelFactory(repository, application = requireActivity().application)
+        viewModel = ViewModelProvider(this, factory).get(MainViewModel::class.java)
         initObserves()
 
         return binding.root
@@ -58,8 +64,50 @@ class MainFragment : Fragment() {
                 },
                 onFailure =
                 {
+                    // todo request permissions
+                    requestLocationPermissions()
                     Toast.makeText(context, R.string.error_message, Toast.LENGTH_SHORT).show()
                 })
+        }
+    }
+
+    private fun requestLocationPermissions() {
+        when {
+            ContextCompat.checkSelfPermission(
+                requireContext(),
+                Manifest.permission.ACCESS_COARSE_LOCATION
+            ) == PackageManager.PERMISSION_GRANTED &&
+                    ContextCompat.checkSelfPermission(
+                        requireContext(),
+                        Manifest.permission.ACCESS_FINE_LOCATION
+                    ) == PackageManager.PERMISSION_GRANTED -> {
+                // You can use the API that requires the permission.
+                viewModel.loadData()
+            }
+            shouldShowRequestPermissionRationale(Manifest.permission.ACCESS_FINE_LOCATION) -> {
+                // In an educational UI, explain to the user why your app requires this
+                // permission for a specific feature to behave as expected, and what
+                // features are disabled if it's declined. In this UI, include a
+                // "cancel" or "no thanks" button that lets the user continue
+                // using your app without granting the permission.
+                Toast.makeText(
+                    requireContext(),
+                    getString(R.string.error_message),
+                    Toast.LENGTH_SHORT
+                )
+//            showInContextUI(...)
+            }
+            else -> {
+                // You can directly ask for the permission.
+                // The registered ActivityResultCallback gets the result of this request.
+                ActivityCompat.requestPermissions(
+                    requireActivity(),
+                    arrayOf(
+                        Manifest.permission.ACCESS_COARSE_LOCATION,
+                        Manifest.permission.ACCESS_FINE_LOCATION
+                    ), 0
+                )
+            }
         }
     }
 
