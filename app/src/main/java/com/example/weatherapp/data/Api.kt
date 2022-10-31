@@ -14,7 +14,6 @@ interface Api {
         @Query("appid") apikey: String
     ): WeatherForecast
 
-    // todo
     // api.openweathermap.org/data/2.5/forecast?q={city name}&appid={API key}
     @GET("forecast")
     suspend fun getWeatherForecast(

@@ -18,17 +18,18 @@ import androidx.preference.PreferenceManager
 import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.RecyclerView
 import com.example.weatherapp.MainActivity
-import com.example.weatherapp.MainViewModel
-import com.example.weatherapp.MainViewModelFactory
 import com.example.weatherapp.R
 import com.example.weatherapp.data.WeatherRepository
 import com.example.weatherapp.data.response.MainInformationAboutDay
 import com.example.weatherapp.data.response.WeatherForecast
 import com.example.weatherapp.databinding.FragmentMainBinding
+import com.example.weatherapp.exceptions.InvalidCityException
 import com.example.weatherapp.exceptions.LocationPermissionDeniedException
 import com.example.weatherapp.extensions.setWeatherIcon
 import com.example.weatherapp.util.WeatherForecastAdapter
 import com.example.weatherapp.util.managers.ConvertingManager
+import com.example.weatherapp.viewmodel.MainViewModel
+import com.example.weatherapp.viewmodel.MainViewModelFactory
 import dagger.hilt.android.AndroidEntryPoint
 import javax.inject.Inject
 
@@ -38,6 +39,7 @@ class MainFragment : Fragment() {
     private val binding get() = _binding!!
 
     private lateinit var viewModel: MainViewModel
+
     private val adapter = WeatherForecastAdapter()
 
     @Inject
@@ -50,8 +52,13 @@ class MainFragment : Fragment() {
         _binding = FragmentMainBinding.inflate(inflater, container, false)
 
         showProgressBar()
-        val factory = MainViewModelFactory(repository, application = requireActivity().application)
-        viewModel = ViewModelProvider(this, factory).get(MainViewModel::class.java)
+        val factory = MainViewModelFactory(
+            repository,
+            application = requireActivity().application,
+            sp = PreferenceManager.getDefaultSharedPreferences(requireContext())
+        )
+        viewModel = ViewModelProvider(this, factory)[MainViewModel::class.java]
+
         initObserves()
 
         return binding.root
@@ -62,16 +69,26 @@ class MainFragment : Fragment() {
             resWeatherForecast.fold(
                 onSuccess = {
                     hideProgressBar()
-                    showActionBarTitle(it.city.name, it.city.country)
                     setWeatherForecastToUi(it)
+                    showActionBarTitle(it.city.name, it.city.country)
+                    saveToPreferences(it.city.name, it.city.country)
+
                 },
                 onFailure =
                 {
                     // todo request permissions
-                    if (it is LocationPermissionDeniedException) {
-                        requestLocationPermissions()
-                    } else {
-                        Toast.makeText(context, R.string.error_message, Toast.LENGTH_SHORT).show()
+                    when (it) {
+                        is LocationPermissionDeniedException -> {
+                            requestLocationPermissions()
+                        }
+                        is InvalidCityException -> {
+                            Toast.makeText(context, R.string.error_invalid_city, Toast.LENGTH_SHORT)
+                                .show()
+                        }
+                        else -> {
+                            Toast.makeText(context, R.string.error_message, Toast.LENGTH_SHORT)
+                                .show()
+                        }
                     }
                 })
         }
@@ -96,7 +113,7 @@ class MainFragment : Fragment() {
                         requireContext(),
                         Manifest.permission.ACCESS_FINE_LOCATION
                     ) == PackageManager.PERMISSION_GRANTED -> {
-                // You can use the API that requires the permission.
+                // Everything is ok
                 viewModel.loadData()
             }
             shouldShowRequestPermissionRationale(Manifest.permission.ACCESS_FINE_LOCATION) -> {
@@ -107,13 +124,14 @@ class MainFragment : Fragment() {
                 // using your app without granting the permission.
                 Toast.makeText(
                     requireContext(),
-                    getString(R.string.error_message),
+                    getString(R.string.error_no_location_access_granted),
                     Toast.LENGTH_SHORT
-                )
+                ).show()
             }
             else -> {
                 // You can directly ask for the permission.
                 // The registered ActivityResultCallback gets the result of this request.
+                // todo check result
                 ActivityCompat.requestPermissions(
                     requireActivity(),
                     arrayOf(
@@ -190,10 +208,8 @@ class MainFragment : Fragment() {
             }
             textClock.format24Hour = timeFormat
 
-            // todo check if logic correct
             setUpAdapter(timeFormat, temperatureUnit, weatherForecast.list.drop(1))
             setUpRecycler()
-//            rvWeather.adapter = WeatherForecastAdapter(weatherForecast.list.drop(1), resources, sp)
         }
     }
 
@@ -218,6 +234,15 @@ class MainFragment : Fragment() {
             rvWeather.setHasFixedSize(true)
             rvWeather.adapter = adapter
         }
+    }
+
+    private fun saveToPreferences(city: String, country: String) {
+        PreferenceManager.getDefaultSharedPreferences(requireContext())
+            .edit().run {
+                putString(MainActivity.PREF_CITY_KEY, city)
+                putString(MainActivity.PREF_COUNTRY_KEY, country)
+                apply()
+            }
     }
 
 }
