@@ -20,7 +20,7 @@
     <DropDownPreference
         android:entries="@array/location_service"
         android:entryValues="@array/location_service_boolean"
-        android:key="location service"
+        android:key="is auto"
         android:title="@string/obtaining_location_method"
         app:useSimpleSummaryProvider="true" />
 

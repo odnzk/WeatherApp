@@ -1,15 +1,13 @@
 package com.example.weatherapp.fragments
 
 import android.Manifest
-import android.content.pm.PackageManager
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
+import androidx.activity.result.contract.ActivityResultContracts
 import androidx.appcompat.app.AppCompatActivity
-import androidx.core.app.ActivityCompat
-import androidx.core.content.ContextCompat
 import androidx.core.view.children
 import androidx.core.widget.ContentLoadingProgressBar
 import androidx.fragment.app.Fragment
@@ -18,17 +16,18 @@ import androidx.preference.PreferenceManager
 import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.RecyclerView
 import com.example.weatherapp.MainActivity
-import com.example.weatherapp.MainViewModel
-import com.example.weatherapp.MainViewModelFactory
 import com.example.weatherapp.R
 import com.example.weatherapp.data.WeatherRepository
 import com.example.weatherapp.data.response.MainInformationAboutDay
 import com.example.weatherapp.data.response.WeatherForecast
 import com.example.weatherapp.databinding.FragmentMainBinding
+import com.example.weatherapp.exceptions.InvalidCityException
 import com.example.weatherapp.exceptions.LocationPermissionDeniedException
 import com.example.weatherapp.extensions.setWeatherIcon
 import com.example.weatherapp.util.WeatherForecastAdapter
 import com.example.weatherapp.util.managers.ConvertingManager
+import com.example.weatherapp.viewmodel.MainViewModel
+import com.example.weatherapp.viewmodel.MainViewModelFactory
 import dagger.hilt.android.AndroidEntryPoint
 import javax.inject.Inject
 
@@ -38,7 +37,17 @@ class MainFragment : Fragment() {
     private val binding get() = _binding!!
 
     private lateinit var viewModel: MainViewModel
+
     private val adapter = WeatherForecastAdapter()
+
+    private val permissionsLauncher =
+        registerForActivityResult(ActivityResultContracts.RequestMultiplePermissions()) {
+            if (it[Manifest.permission.ACCESS_FINE_LOCATION] == true
+                || it[Manifest.permission.ACCESS_COARSE_LOCATION] == true
+            ) {
+                viewModel.loadData()
+            }
+        }
 
     @Inject
     lateinit var repository: WeatherRepository
@@ -49,32 +58,54 @@ class MainFragment : Fragment() {
     ): View {
         _binding = FragmentMainBinding.inflate(inflater, container, false)
 
+        requestLocationPermissions()
         showProgressBar()
-        val factory = MainViewModelFactory(repository, application = requireActivity().application)
-        viewModel = ViewModelProvider(this, factory).get(MainViewModel::class.java)
         initObserves()
 
         return binding.root
     }
 
     private fun initObserves() {
+        val factory = MainViewModelFactory(
+            repository,
+            application = requireActivity().application,
+            sp = PreferenceManager.getDefaultSharedPreferences(requireContext())
+        )
+        viewModel = ViewModelProvider(this, factory)[MainViewModel::class.java]
         viewModel.weatherForecast.observe(viewLifecycleOwner) { resWeatherForecast ->
             resWeatherForecast.fold(
                 onSuccess = {
                     hideProgressBar()
-                    showActionBarTitle(it.city.name, it.city.country)
                     setWeatherForecastToUi(it)
+                    showActionBarTitle(it.city.name, it.city.country)
+                    saveToPreferences(it.city.name, it.city.country)
                 },
                 onFailure =
                 {
-                    // todo request permissions
-                    if (it is LocationPermissionDeniedException) {
-                        requestLocationPermissions()
-                    } else {
-                        Toast.makeText(context, R.string.error_message, Toast.LENGTH_SHORT).show()
+                    when (it) {
+                        is LocationPermissionDeniedException -> {
+                            requestLocationPermissions()
+                        }
+                        is InvalidCityException -> {
+                            Toast.makeText(context, R.string.error_invalid_city, Toast.LENGTH_SHORT)
+                                .show()
+                        }
+                        else -> {
+                            Toast.makeText(context, R.string.error_message, Toast.LENGTH_SHORT)
+                                .show()
+                        }
                     }
                 })
         }
+    }
+
+    private fun requestLocationPermissions() {
+        permissionsLauncher.launch(
+            arrayOf(
+                Manifest.permission.ACCESS_COARSE_LOCATION,
+                Manifest.permission.ACCESS_FINE_LOCATION
+            )
+        )
     }
 
     private fun showActionBarTitle(city: String, country: String) {
@@ -84,45 +115,6 @@ class MainFragment : Fragment() {
                 city,
                 country
             )
-    }
-
-    private fun requestLocationPermissions() {
-        when {
-            ContextCompat.checkSelfPermission(
-                requireContext(),
-                Manifest.permission.ACCESS_COARSE_LOCATION
-            ) == PackageManager.PERMISSION_GRANTED &&
-                    ContextCompat.checkSelfPermission(
-                        requireContext(),
-                        Manifest.permission.ACCESS_FINE_LOCATION
-                    ) == PackageManager.PERMISSION_GRANTED -> {
-                // You can use the API that requires the permission.
-                viewModel.loadData()
-            }
-            shouldShowRequestPermissionRationale(Manifest.permission.ACCESS_FINE_LOCATION) -> {
-                // In an educational UI, explain to the user why your app requires this
-                // permission for a specific feature to behave as expected, and what
-                // features are disabled if it's declined. In this UI, include a
-                // "cancel" or "no thanks" button that lets the user continue
-                // using your app without granting the permission.
-                Toast.makeText(
-                    requireContext(),
-                    getString(R.string.error_message),
-                    Toast.LENGTH_SHORT
-                )
-            }
-            else -> {
-                // You can directly ask for the permission.
-                // The registered ActivityResultCallback gets the result of this request.
-                ActivityCompat.requestPermissions(
-                    requireActivity(),
-                    arrayOf(
-                        Manifest.permission.ACCESS_COARSE_LOCATION,
-                        Manifest.permission.ACCESS_FINE_LOCATION
-                    ), 0
-                )
-            }
-        }
     }
 
     private fun showProgressBar() {
@@ -138,7 +130,7 @@ class MainFragment : Fragment() {
         for (view in binding.mainCl.children) {
             view.visibility = View.VISIBLE
             if (view.id == R.id.progress_bar) {
-                (view as ContentLoadingProgressBar).hide()
+                (view as? ContentLoadingProgressBar)?.hide()
             }
         }
     }
@@ -190,10 +182,8 @@ class MainFragment : Fragment() {
             }
             textClock.format24Hour = timeFormat
 
-            // todo check if logic correct
             setUpAdapter(timeFormat, temperatureUnit, weatherForecast.list.drop(1))
             setUpRecycler()
-//            rvWeather.adapter = WeatherForecastAdapter(weatherForecast.list.drop(1), resources, sp)
         }
     }
 
@@ -218,6 +208,15 @@ class MainFragment : Fragment() {
             rvWeather.setHasFixedSize(true)
             rvWeather.adapter = adapter
         }
+    }
+
+    private fun saveToPreferences(city: String, country: String) {
+        PreferenceManager.getDefaultSharedPreferences(requireContext())
+            .edit().run {
+                putString(MainActivity.PREF_CITY_KEY, city)
+                putString(MainActivity.PREF_COUNTRY_KEY, country)
+                apply()
+            }
     }
 
 }

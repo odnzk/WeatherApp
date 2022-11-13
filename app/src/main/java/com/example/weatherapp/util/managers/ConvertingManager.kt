@@ -6,7 +6,6 @@ import java.text.SimpleDateFormat
 import java.util.*
 
 class ConvertingManager(private val res: Resources) {
-
     companion object {
         private const val M_IN_KM = 1000.0
         private const val FORMAT_DOUBLE = "%.1f"
@@ -16,15 +15,6 @@ class ConvertingManager(private val res: Resources) {
         private const val FAHRENHEIT_SUMMAND = 32
         private const val UNIX_NUMBER = 1000
         const val NIGHT_CHAR = 'n'
-        const val RAIN_ICON_LOWER_BOUND = 200
-        const val RAIN_ICON_UPPER_BOUND = 531
-        const val SNOW_ICON_LOWER_BOUND = 600
-        const val SNOW_ICON_UPPER_BOUND = 622
-        const val MIST_ICON_LOWER_BOUND = 700
-        const val MIST_ICON_UPPER_BOUND = 781
-        const val CLOUDS_WITH_SUN_ICON = 801
-        const val CLOUDS_ICON_LOWER_BOUND = 802
-        const val CLOUDS_ICON_UPPER_BOUND = 804
     }
 
     fun convertVisibility(visibility: Int): String {

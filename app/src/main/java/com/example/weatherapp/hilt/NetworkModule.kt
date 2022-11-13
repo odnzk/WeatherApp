@@ -11,8 +11,7 @@ import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
 import javax.inject.Singleton
 
-
-private const val WEATHER_BASE_URL = "https://api.openweathermap.org/data/2.5/"
+private const val WEATHER_BASE_URL = "http://api.openweathermap.org/data/2.5/"
 
 @Module
 @InstallIn(SingletonComponent::class)
@@ -44,5 +43,6 @@ object NetworkModule {
     fun providesRepository(api: Api): WeatherRepository {
         return WeatherRepository(api)
     }
+
 
 }

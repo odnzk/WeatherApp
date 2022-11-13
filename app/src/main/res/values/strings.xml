@@ -17,11 +17,12 @@
     <string name="day_time_format">%1$s,  %2$s</string>
     <string name="feels_like">Feels like %1$d%2$s</string>
     <string name="city_country_format">%1$s,  %2$s</string>
-    <string name="no_location_access_granted">Allow using location  to get Weather data</string>
-    <string name="only_approximate_location_access_granted">Great! Now, please, try loading weather forecast again</string>
-    <string name="precise_location_access_granted">Great! Now, please, try loading weather forecast again</string>
+    <string name="error_no_location_access_granted">Allow using location  to get weather forecast</string>
+    <string name="only_approximate_location_access_granted">Please, try loading weather forecast again</string>
+    <string name="precise_location_access_granted">Please, try loading weather forecast again</string>
 
-    <string name="error_message">Error, please reopen app</string>
+    <string name="error_message">Cannot load data about last known location</string>
+    <string name="error_invalid_city">Can\'t load data for this city</string>
     <string name="obtaining_location_method">Obtaining a location</string>
 
 
