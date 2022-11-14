@@ -4,6 +4,7 @@ import android.Manifest
 import android.app.Application
 import android.content.pm.PackageManager
 import android.location.Location
+import android.util.Log
 import androidx.core.app.ActivityCompat
 import com.example.weatherapp.exceptions.LocationPermissionDeniedException
 import com.google.android.gms.location.LocationServices
@@ -23,7 +24,7 @@ class LocationPermissionManager(private val application : Application) {
                 Manifest.permission.ACCESS_COARSE_LOCATION
             ) != PackageManager.PERMISSION_GRANTED
         ) {
-            return Result.failure(LocationPermissionDeniedException())
+            return Result.failure(LocationPermissionDeniedException("LocationPermissionDenied"))
         }
         return Result.success(fusedLocationProviderClient.lastLocation)
     }

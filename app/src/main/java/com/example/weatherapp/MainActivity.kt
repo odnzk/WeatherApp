@@ -1,6 +1,7 @@
 package com.example.weatherapp
 
 import android.os.Bundle
+import android.util.Log
 import android.view.Menu
 import android.view.MenuItem
 import androidx.activity.viewModels
@@ -13,6 +14,7 @@ import androidx.navigation.ui.setupActionBarWithNavController
 import androidx.preference.PreferenceManager
 import com.example.weatherapp.data.WeatherRepository
 import com.example.weatherapp.databinding.ActivityMainBinding
+import com.example.weatherapp.fragments.SettingsFragment
 import com.example.weatherapp.viewmodel.MainViewModel
 import com.example.weatherapp.viewmodel.MainViewModelFactory
 import dagger.hilt.android.AndroidEntryPoint
@@ -33,42 +35,22 @@ class MainActivity : AppCompatActivity() {
     @Inject
     lateinit var repository: WeatherRepository
 
-//    private val locationPermissionRequest by lazy(::initLocationPermissionRequest)
-
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
-
-
-//        val locationPermissionRequest = registerForActivityResult(
-//            ActivityResultContracts.RequestMultiplePermissions()
-//        ) { permissions ->
-//            when {
-//                permissions.getOrDefault(Manifest.permission.ACCESS_FINE_LOCATION, false) -> {
-//                    // Precise location access granted.
-//                    Log.d("TAGTAG", "permissions granted")
-//                }
-//                permissions.getOrDefault(Manifest.permission.ACCESS_COARSE_LOCATION, false) -> {
-//                    // Only approximate location access granted.
-//                    Log.d("TAGTAG", "")
-//                }
-//                else -> {
-//                    // No location access granted.
-//                    Log.d("TAGTAG", "")
-//                }
-//            }
-//        }
-        // Before you perform the actual permission request, check whether your app
-        // already has the permissions, and whether your app needs to show a permission
-        // rationale dialog. For more details, see Request permissions.
-
 
         setUpNavigation()
     }
 
     override fun onCreateOptionsMenu(menu: Menu?): Boolean {
         menuInflater.inflate(R.menu.top_app_bar, menu)
+        (supportFragmentManager.findFragmentById(R.id.nav_host_fragment) as NavHostFragment).run{
+            val currFragment = childFragmentManager.fragments.last()
+            if(currFragment != null && currFragment is SettingsFragment){
+                menu?.clear()
+            }
+        }
         return true
     }
 
@@ -88,42 +70,6 @@ class MainActivity : AppCompatActivity() {
         )
     }
 
-//    private fun initLocationPermissionRequest(): ActivityResultLauncher<Array<String>> {
-//        return registerForActivityResult(ActivityResultContracts.RequestMultiplePermissions()) { permissions ->
-//            when {
-//                permissions.getOrDefault(
-//                    Manifest.permission.ACCESS_FINE_LOCATION,
-//                    false
-//                ) -> {
-//                    // Precise location access granted.
-//                    Toast.makeText(
-//                        this,
-//                        getString(R.string.precise_location_access_granted),
-//                        Toast.LENGTH_SHORT
-//                    ).show()
-//                }
-//                permissions.getOrDefault(
-//                    Manifest.permission.ACCESS_COARSE_LOCATION,
-//                    false
-//                ) -> {
-//                    // Only approximate location access granted.
-//                    Toast.makeText(
-//                        this,
-//                        getString(R.string.only_approximate_location_access_granted),
-//                        Toast.LENGTH_SHORT
-//                    ).show()
-//                }
-//                else -> {
-//                    Toast.makeText(
-//                        this,
-//                        getString(R.string.no_location_access_granted),
-//                        Toast.LENGTH_SHORT
-//                    ).show()
-//                }
-//            }
-//        }
-//    }
-
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         when (item.itemId) {
             R.id.refresh -> viewModel.loadData()
@@ -136,7 +82,6 @@ class MainActivity : AppCompatActivity() {
     }
 
     companion object {
-        const val PREF_NAME = "weather preferences"
         const val PREF_TEMPERATURE_UNIT_KEY = "temperature unit"
         const val PREF_TIME_FORMAT_KEY = "time format"
         const val PREF_CITY_KEY = "location city"

@@ -1,15 +1,13 @@
 package com.example.weatherapp.fragments
 
 import android.Manifest
-import android.content.pm.PackageManager
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
+import androidx.activity.result.contract.ActivityResultContracts
 import androidx.appcompat.app.AppCompatActivity
-import androidx.core.app.ActivityCompat
-import androidx.core.content.ContextCompat
 import androidx.core.view.children
 import androidx.core.widget.ContentLoadingProgressBar
 import androidx.fragment.app.Fragment
@@ -42,6 +40,15 @@ class MainFragment : Fragment() {
 
     private val adapter = WeatherForecastAdapter()
 
+    private val permissionsLauncher =
+        registerForActivityResult(ActivityResultContracts.RequestMultiplePermissions()) {
+            if (it[Manifest.permission.ACCESS_FINE_LOCATION] == true
+                || it[Manifest.permission.ACCESS_COARSE_LOCATION] == true
+            ) {
+                viewModel.loadData()
+            }
+        }
+
     @Inject
     lateinit var repository: WeatherRepository
 
@@ -51,20 +58,20 @@ class MainFragment : Fragment() {
     ): View {
         _binding = FragmentMainBinding.inflate(inflater, container, false)
 
+        requestLocationPermissions()
         showProgressBar()
-        val factory = MainViewModelFactory(
-            repository,
-            application = requireActivity().application,
-            sp = PreferenceManager.getDefaultSharedPreferences(requireContext())
-        )
-        viewModel = ViewModelProvider(this, factory)[MainViewModel::class.java]
-
         initObserves()
 
         return binding.root
     }
 
     private fun initObserves() {
+        val factory = MainViewModelFactory(
+            repository,
+            application = requireActivity().application,
+            sp = PreferenceManager.getDefaultSharedPreferences(requireContext())
+        )
+        viewModel = ViewModelProvider(this, factory)[MainViewModel::class.java]
         viewModel.weatherForecast.observe(viewLifecycleOwner) { resWeatherForecast ->
             resWeatherForecast.fold(
                 onSuccess = {
@@ -72,11 +79,9 @@ class MainFragment : Fragment() {
                     setWeatherForecastToUi(it)
                     showActionBarTitle(it.city.name, it.city.country)
                     saveToPreferences(it.city.name, it.city.country)
-
                 },
                 onFailure =
                 {
-                    // todo request permissions
                     when (it) {
                         is LocationPermissionDeniedException -> {
                             requestLocationPermissions()
@@ -94,6 +99,15 @@ class MainFragment : Fragment() {
         }
     }
 
+    private fun requestLocationPermissions() {
+        permissionsLauncher.launch(
+            arrayOf(
+                Manifest.permission.ACCESS_COARSE_LOCATION,
+                Manifest.permission.ACCESS_FINE_LOCATION
+            )
+        )
+    }
+
     private fun showActionBarTitle(city: String, country: String) {
         (activity as? AppCompatActivity)?.supportActionBar?.title =
             getString(
@@ -101,46 +115,6 @@ class MainFragment : Fragment() {
                 city,
                 country
             )
-    }
-
-    private fun requestLocationPermissions() {
-        when {
-            ContextCompat.checkSelfPermission(
-                requireContext(),
-                Manifest.permission.ACCESS_COARSE_LOCATION
-            ) == PackageManager.PERMISSION_GRANTED &&
-                    ContextCompat.checkSelfPermission(
-                        requireContext(),
-                        Manifest.permission.ACCESS_FINE_LOCATION
-                    ) == PackageManager.PERMISSION_GRANTED -> {
-                // Everything is ok
-                viewModel.loadData()
-            }
-            shouldShowRequestPermissionRationale(Manifest.permission.ACCESS_FINE_LOCATION) -> {
-                // In an educational UI, explain to the user why your app requires this
-                // permission for a specific feature to behave as expected, and what
-                // features are disabled if it's declined. In this UI, include a
-                // "cancel" or "no thanks" button that lets the user continue
-                // using your app without granting the permission.
-                Toast.makeText(
-                    requireContext(),
-                    getString(R.string.error_no_location_access_granted),
-                    Toast.LENGTH_SHORT
-                ).show()
-            }
-            else -> {
-                // You can directly ask for the permission.
-                // The registered ActivityResultCallback gets the result of this request.
-                // todo check result
-                ActivityCompat.requestPermissions(
-                    requireActivity(),
-                    arrayOf(
-                        Manifest.permission.ACCESS_COARSE_LOCATION,
-                        Manifest.permission.ACCESS_FINE_LOCATION
-                    ), 0
-                )
-            }
-        }
     }
 
     private fun showProgressBar() {
@@ -156,7 +130,7 @@ class MainFragment : Fragment() {
         for (view in binding.mainCl.children) {
             view.visibility = View.VISIBLE
             if (view.id == R.id.progress_bar) {
-                (view as ContentLoadingProgressBar).hide()
+                (view as? ContentLoadingProgressBar)?.hide()
             }
         }
     }

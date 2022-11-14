@@ -1,4 +1,4 @@
 package com.example.weatherapp.exceptions
 
-class InvalidCityException : Exception() {
+class InvalidCityException(message: String) : Exception(message) {
 }

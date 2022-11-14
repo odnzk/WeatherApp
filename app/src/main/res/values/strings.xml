@@ -21,7 +21,7 @@
     <string name="only_approximate_location_access_granted">Please, try loading weather forecast again</string>
     <string name="precise_location_access_granted">Please, try loading weather forecast again</string>
 
-    <string name="error_message">Error, please reopen app</string>
+    <string name="error_message">Cannot load data about last known location</string>
     <string name="error_invalid_city">Can\'t load data for this city</string>
     <string name="obtaining_location_method">Obtaining a location</string>
 

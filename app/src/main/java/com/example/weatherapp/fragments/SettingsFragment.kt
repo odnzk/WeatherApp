@@ -1,10 +1,7 @@
 package com.example.weatherapp.fragments
 
 import android.os.Bundle
-import android.util.Log
-import android.view.LayoutInflater
-import android.view.View
-import android.view.ViewGroup
+import android.view.*
 import androidx.core.content.ContextCompat.getColor
 import androidx.lifecycle.ViewModelProvider
 import androidx.preference.DropDownPreference
@@ -23,7 +20,6 @@ import javax.inject.Inject
 @AndroidEntryPoint
 class SettingsFragment : PreferenceFragmentCompat() {
 
-    //    private val activityViewModel = ViewModelProvider(this)[MainViewModel::class.java]
     private lateinit var viewModel: MainViewModel
 
     @Inject
@@ -32,31 +28,21 @@ class SettingsFragment : PreferenceFragmentCompat() {
     override fun onCreatePreferences(savedInstanceState: Bundle?, rootKey: String?) {
         setPreferencesFromResource(R.xml.preferences, rootKey)
 
+        activity?.invalidateOptionsMenu()
+
         val factory = MainViewModelFactory(
             repository,
             application = requireActivity().application,
             sp = PreferenceManager.getDefaultSharedPreferences(requireContext())
         )
         viewModel = ViewModelProvider(this, factory)[MainViewModel::class.java]
-//        viewModel = ViewModelProvider(this)[MainViewModel::class.java]
 
         findPreference<EditTextPreference>(MainActivity.PREF_CITY_KEY)?.setOnPreferenceChangeListener { _, newValue ->
-//            PreferenceManager.getDefaultSharedPreferences(requireContext()).run {
-//                edit().putString(MainActivity.PREF_CITY_KEY, newValue.toString()).apply()
-//                getString(PREF_OBTAINING_LOCATION, "true").toBoolean()
-//            }
-//            if (!isAuto) {
-//                // to load new data by city which user select
-//                viewModel.loadData()
-//            }
-
-
             viewModel.loadData()
             true
         }
 
         findPreference<DropDownPreference>(MainActivity.PREF_IS_AUTO)?.setOnPreferenceChangeListener { _, newValue ->
-            Log.d("TAGTAG", "is auto: $newValue")
             viewModel.loadData()
             true
         }
@@ -71,6 +57,5 @@ class SettingsFragment : PreferenceFragmentCompat() {
             setBackgroundColor(getColor(requireContext(), R.color.purple))
         }
     }
-
-
 }
+

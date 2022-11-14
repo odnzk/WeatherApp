@@ -11,6 +11,7 @@ import com.example.weatherapp.MainActivity
 import com.example.weatherapp.data.WeatherRepository
 import com.example.weatherapp.data.response.WeatherForecast
 import com.example.weatherapp.exceptions.InvalidCityException
+import com.example.weatherapp.exceptions.LocationRequestFailedException
 import com.example.weatherapp.util.managers.LocationPermissionManager
 import kotlinx.coroutines.launch
 import javax.inject.Inject
@@ -27,22 +28,15 @@ class MainViewModel @Inject constructor(
 
     private val locationPermissionManager = LocationPermissionManager(application)
 
-
-    init {
-        loadData()
-    }
-
     fun loadData() {
         if (sp.getString(MainActivity.PREF_IS_AUTO, "true").toBoolean()) {
             loadDataAuto()
         } else {
-            // check if pref contains correct city -> if not set failure
             val city: String? = sp.getString(MainActivity.PREF_CITY_KEY, "")
-
             if (!city.isNullOrEmpty() && city.isNotBlank()) {
                 loadDataManually(city)
             } else {
-                _weatherForecast.value = Result.failure(InvalidCityException())
+                _weatherForecast.value = Result.failure(InvalidCityException("Invalid city"))
             }
         }
     }
@@ -62,7 +56,8 @@ class MainViewModel @Inject constructor(
             onSuccess = { task ->
                 task.addOnSuccessListener {
                     if (it == null) {
-                        _weatherForecast.value = Result.failure(java.lang.NullPointerException())
+                        _weatherForecast.value =
+                            Result.failure(LocationRequestFailedException("LocationRequestFailed"))
                     } else {
                         updateWeatherForecastAuto(it)
                     }
