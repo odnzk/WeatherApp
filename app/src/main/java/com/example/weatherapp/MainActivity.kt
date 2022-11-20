@@ -1,7 +1,6 @@
 package com.example.weatherapp
 
 import android.os.Bundle
-import android.util.Log
 import android.view.Menu
 import android.view.MenuItem
 import androidx.activity.viewModels
@@ -58,7 +57,6 @@ class MainActivity : AppCompatActivity() {
         val navHostFragment =
             supportFragmentManager.findFragmentById(R.id.nav_host_fragment) as NavHostFragment
         val navController: NavController = navHostFragment.navController
-
         val appBarConfiguration = AppBarConfiguration(
             topLevelDestinationIds = setOf(R.id.mainFragment),
             fallbackOnNavigateUpListener = ::onSupportNavigateUp

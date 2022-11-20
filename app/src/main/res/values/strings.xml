@@ -8,6 +8,18 @@
     <string name="humidity">Humidity</string>
     <string name="visibility">Visibility</string>
     <string name="pressure">Pressure</string>
+    <string name="sunrise">Sunrise</string>
+    <string name="sunrise_icon">sunrise_icon</string>
+    <string name="sunset">Sunset</string>
+    <string name="sunset_icon">sunset icon</string>
+    <string name="unit_settings_category">Unit settings</string>
+    <string name="temperature">Temperature</string>
+    <string name="time_format">Time format</string>
+    <string name="title_current_location">Current location</string>
+    <string name="summary_current_location">Location for weather forecast</string>
+    <string name="weather_icon">weather icon</string>
+    <string name="weather_condition_image">weather condition image</string>
+
     <string name="temperature_unit">%1$d%2$s</string>
     <string name="pressure_unit">%1$d hPa</string>
     <string name="wind_unit">%1$s km/h</string>
@@ -17,12 +29,12 @@
     <string name="day_time_format">%1$s,  %2$s</string>
     <string name="feels_like">Feels like %1$d%2$s</string>
     <string name="city_country_format">%1$s,  %2$s</string>
+
     <string name="error_no_location_access_granted">Allow using location  to get weather forecast</string>
     <string name="only_approximate_location_access_granted">Please, try loading weather forecast again</string>
     <string name="precise_location_access_granted">Please, try loading weather forecast again</string>
-
     <string name="error_message">Cannot load data about last known location</string>
-    <string name="error_invalid_city">Can\'t load data for this city</string>
+    <string name="error_invalid_city">Cannot load data for this city</string>
     <string name="obtaining_location_method">Obtaining a location</string>
 
 
@@ -41,7 +53,6 @@
         <item>F</item>
         <item>°C</item>
     </string-array>
-
 
     <string-array name="time_format">
         <item>24</item>
@@ -62,16 +73,4 @@
         <item>true</item>
         <item>false</item>
     </string-array>
-
-    <string name="sunrise">Sunrise</string>
-    <string name="sunrise_icon">sunrise_icon</string>
-    <string name="sunset">Sunset</string>
-    <string name="sunset_icon">sunset icon</string>
-    <string name="unit_settings_category">Unit settings</string>
-    <string name="temperature">Temperature</string>
-    <string name="time_format">Time format</string>
-    <string name="title_current_location">Current location</string>
-    <string name="summary_current_location">Location for weather forecast</string>
-    <string name="weather_icon">weather icon</string>
-    <string name="weather_condition_image">weather condition image</string>
 </resources>
