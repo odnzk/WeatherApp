@@ -28,6 +28,11 @@ class MainViewModel @Inject constructor(
 
     private val locationPermissionManager = LocationPermissionManager(application)
 
+
+    init {
+        loadData()
+    }
+
     fun loadData() {
         if (sp.getString(MainActivity.PREF_IS_AUTO, "true").toBoolean()) {
             loadDataAuto()
@@ -56,8 +61,7 @@ class MainViewModel @Inject constructor(
             onSuccess = { task ->
                 task.addOnSuccessListener {
                     if (it == null) {
-                        _weatherForecast.value =
-                            Result.failure(LocationRequestFailedException("LocationRequestFailed"))
+                        _weatherForecast.value = Result.failure(LocationRequestFailedException("Location is null"))
                     } else {
                         updateWeatherForecastAuto(it)
                     }
