@@ -14,7 +14,6 @@ class ConvertingManager(private val res: Resources) {
         private const val FAHRENHEIT_MULTIPLIER = 9 / 5
         private const val FAHRENHEIT_SUMMAND = 32
         private const val UNIX_NUMBER = 1000
-        const val NIGHT_CHAR = 'n'
     }
 
     fun convertVisibility(visibility: Int): String {

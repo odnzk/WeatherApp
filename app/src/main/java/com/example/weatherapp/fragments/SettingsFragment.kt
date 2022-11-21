@@ -1,7 +1,9 @@
 package com.example.weatherapp.fragments
 
 import android.os.Bundle
-import android.view.*
+import android.view.LayoutInflater
+import android.view.View
+import android.view.ViewGroup
 import androidx.core.content.ContextCompat.getColor
 import androidx.lifecycle.ViewModelProvider
 import androidx.preference.DropDownPreference
@@ -20,7 +22,14 @@ import javax.inject.Inject
 @AndroidEntryPoint
 class SettingsFragment : PreferenceFragmentCompat() {
 
-    private lateinit var viewModel: MainViewModel
+    private val viewModel: MainViewModel by lazy{
+        val factory = MainViewModelFactory(
+            repository,
+            application = requireActivity().application,
+            sp = PreferenceManager.getDefaultSharedPreferences(requireContext())
+        )
+        ViewModelProvider(this, factory)[MainViewModel::class.java]
+    }
 
     @Inject
     lateinit var repository: WeatherRepository
@@ -30,19 +39,12 @@ class SettingsFragment : PreferenceFragmentCompat() {
 
         activity?.invalidateOptionsMenu()
 
-        val factory = MainViewModelFactory(
-            repository,
-            application = requireActivity().application,
-            sp = PreferenceManager.getDefaultSharedPreferences(requireContext())
-        )
-        viewModel = ViewModelProvider(this, factory)[MainViewModel::class.java]
-
-        findPreference<EditTextPreference>(MainActivity.PREF_CITY_KEY)?.setOnPreferenceChangeListener { _, newValue ->
+        findPreference<EditTextPreference>(MainActivity.PREF_CITY_KEY)?.setOnPreferenceChangeListener { _, _ ->
             viewModel.loadData()
             true
         }
 
-        findPreference<DropDownPreference>(MainActivity.PREF_IS_AUTO)?.setOnPreferenceChangeListener { _, newValue ->
+        findPreference<DropDownPreference>(MainActivity.PREF_IS_AUTO)?.setOnPreferenceChangeListener { _, _ ->
             viewModel.loadData()
             true
         }

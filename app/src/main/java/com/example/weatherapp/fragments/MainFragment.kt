@@ -36,15 +36,20 @@ class MainFragment : Fragment() {
     private var _binding: FragmentMainBinding? = null
     private val binding get() = _binding!!
 
-    private lateinit var viewModel: MainViewModel
+    private val viewModel: MainViewModel by lazy {
+        val factory = MainViewModelFactory(
+            repository,
+            application = requireActivity().application,
+            sp = PreferenceManager.getDefaultSharedPreferences(requireContext())
+        )
+        ViewModelProvider(this, factory)[MainViewModel::class.java]
+    }
 
     private val adapter = WeatherForecastAdapter()
 
     private val permissionsLauncher =
         registerForActivityResult(ActivityResultContracts.RequestMultiplePermissions()) {
-            if (it[Manifest.permission.ACCESS_FINE_LOCATION] == true
-                || it[Manifest.permission.ACCESS_COARSE_LOCATION] == true
-            ) {
+            if (it[Manifest.permission.ACCESS_FINE_LOCATION] == true || it[Manifest.permission.ACCESS_COARSE_LOCATION] == true) {
                 viewModel.loadData()
             }
         }
@@ -66,12 +71,6 @@ class MainFragment : Fragment() {
     }
 
     private fun initObserves() {
-        val factory = MainViewModelFactory(
-            repository,
-            application = requireActivity().application,
-            sp = PreferenceManager.getDefaultSharedPreferences(requireContext())
-        )
-        viewModel = ViewModelProvider(this, factory)[MainViewModel::class.java]
         viewModel.weatherForecast.observe(viewLifecycleOwner) { resWeatherForecast ->
             resWeatherForecast.fold(
                 onSuccess = {
@@ -175,13 +174,14 @@ class MainFragment : Fragment() {
                 ivWeather.setWeatherIcon(weather[0].id, weather[0].icon)
             }
             weatherForecast.city.run {
+                // EE, h:mmaa -> h:mmaa
+                // EE, HH:mm -> HH:mm
                 tvSunrise.text =
-                    converter.convertTimeToString(timeFormat.split(", ")[1], sunrise.toLong())
+                    converter.convertTimeToString(timeFormat.replace("EE, ", ""), sunrise.toLong())
                 tvSunset.text =
-                    converter.convertTimeToString(timeFormat.split(", ")[1], sunset.toLong())
+                    converter.convertTimeToString(timeFormat.replace("EE, ", ""), sunset.toLong())
             }
             textClock.format24Hour = timeFormat
-
             setUpAdapter(timeFormat, temperatureUnit, weatherForecast.list.drop(1))
             setUpRecycler()
         }
@@ -192,7 +192,7 @@ class MainFragment : Fragment() {
         temperatureUnit: String,
         list: List<MainInformationAboutDay>
     ) {
-        adapter.setData(list)
+        adapter.submitList(list)
         adapter.timeformat = timeFormat
         adapter.temperatureUnit = temperatureUnit
     }
