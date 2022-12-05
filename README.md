@@ -14,6 +14,6 @@ WetherApp is an app that receives a five-day weather forecast.
 Retrofit2, Hilt, ConverterGSON, Coroutines, ViewModelScope, LifecycleScope, ViewModel, LiveData, ViewModelFactory, Fused Location Provider API, Navigation component, CoordinatorLayout, Toolbar, RecyclerView, ConstraintLayout, FragmentContainerView,  NestedScrollView, TextClock,  AndroidX Preference library, View binding
 
 ## Screens
-<img width="200px" alt="main screen" src="https://github.com/Odenezhkina/WeatherApp/blob/master/WeatherApp_main_screen.jpg">
-<img width="200px" alt="main screen" src="https://github.com/Odenezhkina/WeatherApp/blob/master/WeatherApp_settings_screen.jpg">
+<img width="200px" alt="main screen" src="https://github.com/Odenezhkina/WeatherApp/blob/master/.github/images/Screenshot_20221205_104215_WeatherApp%20(1).jpg">
+<img width="200px" alt="main screen" src="https://github.com/Odenezhkina/WeatherApp/blob/master/.github/images/Screenshot_20221205_103938_WeatherApp.jpg">
 
