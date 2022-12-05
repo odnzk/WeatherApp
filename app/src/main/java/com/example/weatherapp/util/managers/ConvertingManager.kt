@@ -27,7 +27,7 @@ class ConvertingManager(private val res: Resources) {
 
 
     private fun format(milliseconds: Long, pattern: String) =
-        SimpleDateFormat(pattern).format(Date(milliseconds))
+        SimpleDateFormat(pattern, Locale.getDefault()).format(Date(milliseconds))
 
     fun convertDateToString(unix: Long): String = format(unix * UNIX_NUMBER, FORMAT_DATE)
 

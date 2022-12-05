@@ -1,7 +1,5 @@
 package com.example.weatherapp.data.response
 
-import java.io.Serializable
-
 data class WeatherForecast(
     val city: City,
     val cnt: Int,

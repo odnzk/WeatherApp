@@ -39,6 +39,7 @@ class SettingsFragment : PreferenceFragmentCompat() {
 
         activity?.invalidateOptionsMenu()
 
+        findPreference<EditTextPreference>(MainActivity.PREF_CITY_KEY)?.context?.setTheme(R.style.Theme_AlertDialog_Default)
         findPreference<EditTextPreference>(MainActivity.PREF_CITY_KEY)?.setOnPreferenceChangeListener { _, _ ->
             viewModel.loadData()
             true

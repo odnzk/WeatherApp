@@ -160,7 +160,7 @@ class MainFragment : Fragment() {
                         converter.convertTemp(temperatureUnit, temp),
                         temperatureUnit
                     )
-//                    tvPressure.text = getString(R.string.pressure_unit, pressure)
+                    tvVisibility.text = converter.convertVisibility(visibility)
                     tvHumidity.text = getString(R.string.humidity_unit, humidity)
                     tvFeelsLike.text =
                         getString(
