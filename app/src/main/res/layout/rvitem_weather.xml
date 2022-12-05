@@ -4,10 +4,13 @@
     android:layout_width="wrap_content"
     android:layout_height="wrap_content"
     xmlns:tools="http://schemas.android.com/tools"
-    app:cardBackgroundColor="@color/white_"
-    app:cardElevation="0dp">
+    app:cardBackgroundColor="@color/white_alpha_15"
+    app:cardElevation="0dp"
+    app:strokeColor="@color/white"
+    app:strokeWidth="1dp">
 
     <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_marginVertical="10dp"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:padding="7dp">
@@ -15,7 +18,7 @@
         <TextView
             android:id="@+id/tv_date"
             tools:text="23.11.22"
-            style="@style/Widget.AppCompat.TextView.H5"
+            style="@style/Body2"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             app:layout_constraintBottom_toTopOf="@id/tv_time"
@@ -27,6 +30,7 @@
             android:id="@+id/tv_time"
             android:textColor="@color/white"
             tools:text="10:14"
+            style="@style/Body1"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             app:layout_constraintBottom_toTopOf="@id/iv_weather"
@@ -38,8 +42,10 @@
         android:id="@+id/iv_weather"
         android:src="@drawable/ic_sun"
         android:layout_width="70dp"
+        android:scaleType="fitCenter"
         android:layout_height="70dp"
-        android:layout_margin="10dp"
+        android:layout_marginVertical="16dp"
+        android:layout_marginHorizontal="10dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/tv_time"
@@ -48,22 +54,21 @@
 
         <TextView
             android:id="@+id/tv_temperature"
-            style="@style/Widget.AppCompat.TextView.H2"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:textColor="@color/pink"
-            tools:text="214 K"
             app:layout_constraintBottom_toTopOf="@+id/tv_title_humidity"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/iv_weather"/>
+            style="@style/Headline2"
+            app:layout_constraintTop_toBottomOf="@id/iv_weather"
+            tools:text="264K" />
 
         <ImageView
             app:layout_constraintHorizontal_chainStyle="packed"
             android:id="@+id/humidity_icon"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:src="@drawable/ic_humidity"
+            android:src="@drawable/ic_humidity_in_percent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="@id/tv_title_humidity"
             app:layout_constraintEnd_toStartOf="@id/tv_title_humidity"
@@ -73,9 +78,9 @@
 
         <TextView
             android:id="@+id/tv_title_humidity"
-            style="@style/Widget.AppCompat.TextView.H5"
             android:padding="2dp"
             tools:text="90%"
+            style="@style/Body2"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             app:layout_constraintBottom_toBottomOf="parent"
