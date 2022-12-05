@@ -56,7 +56,7 @@ class SettingsFragment : PreferenceFragmentCompat() {
         savedInstanceState: Bundle?
     ): View {
         return super.onCreateView(inflater, container, savedInstanceState).apply {
-            setBackgroundColor(getColor(requireContext(), R.color.purple))
+            setBackgroundColor(getColor(requireContext(), R.color.main_blue))
         }
     }
 }

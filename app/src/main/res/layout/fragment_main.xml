@@ -59,7 +59,7 @@
         android:id="@+id/view_main_info_background"
         android:layout_width="0dp"
         android:layout_height="0dp"
-        android:layout_marginTop="40dp"
+        android:layout_marginTop="80dp"
         android:background="@drawable/rectangle_white_alpha15"
         app:layout_constraintBottom_toTopOf="@id/view_sun_info_background"
         app:layout_constraintEnd_toEndOf="parent"
