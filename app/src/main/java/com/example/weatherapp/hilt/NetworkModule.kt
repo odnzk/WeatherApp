@@ -1,7 +1,8 @@
 package com.example.weatherapp.hilt
 
 import com.example.weatherapp.data.Api
-import com.example.weatherapp.data.WeatherRepository
+import com.example.weatherapp.data.repository.WeatherRepository
+import com.example.weatherapp.data.repository.WeatherRepositoryImpl
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
@@ -41,8 +42,7 @@ object NetworkModule {
     @Provides
     @Singleton
     fun providesRepository(api: Api): WeatherRepository {
-        return WeatherRepository(api)
+        return WeatherRepositoryImpl(api)
     }
-
 
 }

@@ -10,12 +10,10 @@ import androidx.navigation.findNavController
 import androidx.navigation.fragment.NavHostFragment
 import androidx.navigation.ui.AppBarConfiguration
 import androidx.navigation.ui.setupActionBarWithNavController
-import androidx.preference.PreferenceManager
-import com.example.weatherapp.data.WeatherRepository
+import com.example.weatherapp.data.repository.WeatherRepository
 import com.example.weatherapp.databinding.ActivityMainBinding
 import com.example.weatherapp.fragments.SettingsFragment
 import com.example.weatherapp.viewmodel.MainViewModel
-import com.example.weatherapp.viewmodel.MainViewModelFactory
 import dagger.hilt.android.AndroidEntryPoint
 import javax.inject.Inject
 
@@ -23,13 +21,7 @@ import javax.inject.Inject
 class MainActivity : AppCompatActivity() {
     private lateinit var binding: ActivityMainBinding
 
-    private val viewModel: MainViewModel by viewModels {
-        MainViewModelFactory(
-            repository,
-            PreferenceManager.getDefaultSharedPreferences(this),
-            application
-        )
-    }
+    private val viewModel: MainViewModel by viewModels()
 
     @Inject
     lateinit var repository: WeatherRepository

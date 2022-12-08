@@ -1,6 +1,7 @@
 package com.example.weatherapp.fragments
 
 import android.Manifest
+import android.content.SharedPreferences
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -11,13 +12,13 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.children
 import androidx.core.widget.ContentLoadingProgressBar
 import androidx.fragment.app.Fragment
-import androidx.lifecycle.ViewModelProvider
+import androidx.fragment.app.viewModels
 import androidx.preference.PreferenceManager
 import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.RecyclerView
 import com.example.weatherapp.MainActivity
 import com.example.weatherapp.R
-import com.example.weatherapp.data.WeatherRepository
+import com.example.weatherapp.data.repository.WeatherRepository
 import com.example.weatherapp.data.response.MainInformationAboutDay
 import com.example.weatherapp.data.response.WeatherForecast
 import com.example.weatherapp.databinding.FragmentMainBinding
@@ -27,7 +28,6 @@ import com.example.weatherapp.extensions.setWeatherIcon
 import com.example.weatherapp.util.WeatherForecastAdapter
 import com.example.weatherapp.util.managers.ConvertingManager
 import com.example.weatherapp.viewmodel.MainViewModel
-import com.example.weatherapp.viewmodel.MainViewModelFactory
 import dagger.hilt.android.AndroidEntryPoint
 import javax.inject.Inject
 
@@ -36,14 +36,10 @@ class MainFragment : Fragment() {
     private var _binding: FragmentMainBinding? = null
     private val binding get() = _binding!!
 
-    private val viewModel: MainViewModel by lazy {
-        val factory = MainViewModelFactory(
-            repository,
-            application = requireActivity().application,
-            sp = PreferenceManager.getDefaultSharedPreferences(requireContext())
-        )
-        ViewModelProvider(this, factory)[MainViewModel::class.java]
-    }
+    @Inject
+    lateinit var sp: SharedPreferences
+
+    private val viewModel: MainViewModel by viewModels()
 
     private val adapter = WeatherForecastAdapter()
 
@@ -211,12 +207,11 @@ class MainFragment : Fragment() {
     }
 
     private fun saveToPreferences(city: String, country: String) {
-        PreferenceManager.getDefaultSharedPreferences(requireContext())
-            .edit().run {
-                putString(MainActivity.PREF_CITY_KEY, city)
-                putString(MainActivity.PREF_COUNTRY_KEY, country)
-                apply()
-            }
+        sp.edit().run {
+            putString(MainActivity.PREF_CITY_KEY, city)
+            putString(MainActivity.PREF_COUNTRY_KEY, country)
+            apply()
+        }
     }
 
 }

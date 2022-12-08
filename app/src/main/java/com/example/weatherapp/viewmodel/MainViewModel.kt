@@ -8,15 +8,16 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.viewModelScope
 import com.example.weatherapp.MainActivity
-import com.example.weatherapp.data.WeatherRepository
+import com.example.weatherapp.data.repository.WeatherRepository
 import com.example.weatherapp.data.response.WeatherForecast
 import com.example.weatherapp.exceptions.InvalidCityException
 import com.example.weatherapp.exceptions.LocationRequestFailedException
 import com.example.weatherapp.util.managers.LocationPermissionManager
+import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
-
+@HiltViewModel
 class MainViewModel @Inject constructor(
     private val repository: WeatherRepository,
     private val sp: SharedPreferences,

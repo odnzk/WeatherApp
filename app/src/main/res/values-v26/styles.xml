@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <style name="Headline2" parent="Widget.MaterialComponents.TextView">
+        <item name="android:fontFamily">@font/source_sans_pro_semibold</item>
+        <item name="android:textSize">22sp</item>
+        <item name="android:textColor">@color/white</item>
+        <item name="android:autoText">true</item>
+        <item name="android:autoSizeMaxTextSize">25sp</item>
+        <item name="android:autoSizeMinTextSize">18sp</item>
+    </style>
+
+</resources>
