@@ -7,11 +7,11 @@ import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.viewModelScope
-import com.example.weatherapp.app.MainActivity
-import com.example.domain.repository.WeatherRepository
-import com.example.domain.model.WeatherForecast
 import com.example.domain.exceptions.InvalidCityException
 import com.example.domain.exceptions.LocationRequestFailedException
+import com.example.domain.model.WeatherForecast
+import com.example.domain.repository.WeatherRepository
+import com.example.weatherapp.app.MainActivity
 import com.example.weatherapp.app.presentation.utils.LocationPermissionManager
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.launch
@@ -19,13 +19,13 @@ import javax.inject.Inject
 
 @HiltViewModel
 class ForecastViewModel @Inject constructor(
-    private val repository: com.example.domain.repository.WeatherRepository,
+    private val repository: WeatherRepository,
     private val sp: SharedPreferences,
     application: Application
 ) : AndroidViewModel(application) {
 
-    private val _weatherForecast = MutableLiveData<Result<com.example.domain.model.WeatherForecast>>()
-    val weatherForecast: LiveData<Result<com.example.domain.model.WeatherForecast>> = _weatherForecast
+    private val _weatherForecast = MutableLiveData<Result<WeatherForecast>>()
+    val weatherForecast: LiveData<Result<WeatherForecast>> = _weatherForecast
 
     private val locationPermissionManager = LocationPermissionManager(application)
 
@@ -34,6 +34,7 @@ class ForecastViewModel @Inject constructor(
         loadData()
     }
 
+    @kotlin.jvm.Throws(InvalidCityException::class)
     fun loadData() {
         if (sp.getString(MainActivity.PREF_IS_AUTO, "true").toBoolean()) {
             loadDataAuto()
@@ -43,9 +44,7 @@ class ForecastViewModel @Inject constructor(
                 loadDataManually(city)
             } else {
                 _weatherForecast.value = Result.failure(
-                    com.example.domain.exceptions.InvalidCityException(
-                        "Invalid city"
-                    )
+                    InvalidCityException()
                 )
             }
         }
@@ -60,6 +59,7 @@ class ForecastViewModel @Inject constructor(
         }
     }
 
+    @kotlin.jvm.Throws(LocationRequestFailedException::class)
     private fun loadDataAuto() {
         val locationRes = locationPermissionManager.getLocation()
         locationRes.fold(
@@ -67,9 +67,7 @@ class ForecastViewModel @Inject constructor(
                 task.addOnSuccessListener {
                     if (it == null) {
                         _weatherForecast.value = Result.failure(
-                            com.example.domain.exceptions.LocationRequestFailedException(
-                                "Location is null"
-                            )
+                            LocationRequestFailedException()
                         )
                     } else {
                         updateWeatherForecastAuto(it)

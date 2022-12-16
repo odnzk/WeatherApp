@@ -14,6 +14,7 @@ class LocationPermissionManager(private val application : Application) {
     private val fusedLocationProviderClient =
         LocationServices.getFusedLocationProviderClient(application)
 
+    @kotlin.jvm.Throws(LocationPermissionDeniedException::class)
     fun getLocation(): Result<Task<Location>> {
         if (ActivityCompat.checkSelfPermission(
                 application,
@@ -23,7 +24,7 @@ class LocationPermissionManager(private val application : Application) {
                 Manifest.permission.ACCESS_COARSE_LOCATION
             ) != PackageManager.PERMISSION_GRANTED
         ) {
-            return Result.failure(com.example.domain.exceptions.LocationPermissionDeniedException("LocationPermissionDenied"))
+            return Result.failure(LocationPermissionDeniedException())
         }
         return Result.success(fusedLocationProviderClient.lastLocation)
     }

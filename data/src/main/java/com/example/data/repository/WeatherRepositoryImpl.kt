@@ -2,9 +2,8 @@ package com.example.data.repository
 
 
 import com.example.data.Api
+import com.example.domain.model.WeatherForecast
 import javax.inject.Inject
-
-private const val API_KEY = "b65750fa8912403310944973c7362a56"
 
 class WeatherRepositoryImpl @Inject constructor(private val api: Api) :
     com.example.domain.repository.WeatherRepository {
@@ -12,11 +11,15 @@ class WeatherRepositoryImpl @Inject constructor(private val api: Api) :
     override suspend fun getWeatherForecast(
         latitude: Double,
         longitude: Double
-    ): com.example.domain.model.WeatherForecast {
+    ): WeatherForecast {
         return api.getWeatherForecast(latitude, longitude, API_KEY)
     }
 
-    override suspend fun getWeatherForecast(cityName: String): com.example.domain.model.WeatherForecast {
+    override suspend fun getWeatherForecast(cityName: String): WeatherForecast {
         return api.getWeatherForecast(cityName, API_KEY)
+    }
+
+    companion object {
+        private const val API_KEY = "b65750fa8912403310944973c7362a56"
     }
 }

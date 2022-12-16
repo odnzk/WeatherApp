@@ -16,13 +16,15 @@ import androidx.fragment.app.viewModels
 import androidx.preference.PreferenceManager
 import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.RecyclerView
-import com.example.weatherapp.app.MainActivity
+import com.example.domain.exceptions.InvalidCityException
+import com.example.domain.exceptions.LocationPermissionDeniedException
 import com.example.weatherapp.R
+import com.example.weatherapp.app.MainActivity
+import com.example.weatherapp.app.presentation.utils.ConvertingManager
+import com.example.weatherapp.app.presentation.utils.rv.WeatherForecastAdapter
+import com.example.weatherapp.app.presentation.viewmodel.ForecastViewModel
 import com.example.weatherapp.databinding.FragmentMainBinding
 import com.example.weatherapp.ext.setWeatherIcon
-import com.example.weatherapp.app.presentation.utils.rv.WeatherForecastAdapter
-import com.example.weatherapp.app.presentation.utils.ConvertingManager
-import com.example.weatherapp.app.presentation.viewmodel.ForecastViewModel
 import dagger.hilt.android.AndroidEntryPoint
 import javax.inject.Inject
 
@@ -33,9 +35,7 @@ class MainFragment : Fragment() {
 
     @Inject
     lateinit var sp: SharedPreferences
-
     private val viewModel: ForecastViewModel by viewModels()
-
     private val adapter = WeatherForecastAdapter()
 
     private val permissionsLauncher =
@@ -73,10 +73,10 @@ class MainFragment : Fragment() {
                 onFailure =
                 {
                     when (it) {
-                        is com.example.domain.exceptions.LocationPermissionDeniedException -> {
+                        is LocationPermissionDeniedException -> {
                             requestLocationPermissions()
                         }
-                        is com.example.domain.exceptions.InvalidCityException -> {
+                        is InvalidCityException -> {
                             Toast.makeText(context, R.string.error_invalid_city, Toast.LENGTH_SHORT)
                                 .show()
                         }
@@ -163,6 +163,7 @@ class MainFragment : Fragment() {
                 tvVisibility.text = converter.convertVisibility(visibility)
                 tvWind.text = getString(R.string.wind_unit, converter.formatDouble(wind.speed))
                 ivWeather.setWeatherIcon(weather[0].id, weather[0].icon)
+//                ivWeather.setWeatherIcon(weather.id, weather.icon)
             }
             weatherForecast.city.run {
                 // EE, h:mmaa -> h:mmaa

@@ -30,6 +30,7 @@ class WeatherHolder(private val binding: RvitemWeatherBinding) :
                     tvDate.text = converter.convertDateToString(this)
                 }
                 ivWeather.setWeatherIcon(item.weather[0].id, item.weather[0].icon)
+//                ivWeather.setWeatherIcon(weather.id, weather.icon)
             }
         }
     }
