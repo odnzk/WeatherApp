@@ -9,31 +9,33 @@ import android.view.ViewGroup
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.children
-import androidx.core.widget.ContentLoadingProgressBar
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.preference.PreferenceManager
 import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.RecyclerView
-import com.example.domain.exceptions.InvalidCityException
 import com.example.domain.exceptions.LocationPermissionDeniedException
 import com.example.domain.repository.WeatherRepository
 import com.example.weatherapp.R
 import com.example.weatherapp.app.MainActivity
 import com.example.weatherapp.app.presentation.rv.WeatherForecastAdapter
 import com.example.weatherapp.app.presentation.util.ConvertingManager
+import com.example.weatherapp.app.presentation.util.ext.errorOccurred
+import com.example.weatherapp.app.presentation.util.ext.loadingFinished
+import com.example.weatherapp.app.presentation.util.ext.loadingStarted
 import com.example.weatherapp.databinding.FragmentMainBinding
+import com.example.weatherapp.databinding.StateLoadingBinding
 import com.example.weatherapp.ext.setWeatherIcon
-import com.example.weatherapp.ext.showToast
 import dagger.hilt.android.AndroidEntryPoint
-import retrofit2.HttpException
-import java.io.IOException
 import javax.inject.Inject
 
 @AndroidEntryPoint
 class HomeFragment : Fragment() {
     private var _binding: FragmentMainBinding? = null
     private val binding get() = _binding!!
+
+    private var _loadingBinding: StateLoadingBinding? = null
+    private val loadingBinding: StateLoadingBinding get() = _loadingBinding!!
 
     @Inject
     lateinit var sp: SharedPreferences
@@ -51,38 +53,41 @@ class HomeFragment : Fragment() {
             }
         }
 
-    override fun onCreateView(
-        inflater: LayoutInflater, container: ViewGroup?,
-        savedInstanceState: Bundle?
-    ): View {
-        _binding = FragmentMainBinding.inflate(inflater, container, false)
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
 
-        requestLocationPermissions()
-        showProgressBar()
+        hideAll()
+        loadingBinding.loadingStarted()
+
         initObserves()
-
-        return binding.root
     }
+
 
     private fun initObserves() {
         viewModel.weatherForecast.observe(viewLifecycleOwner) { resWeatherForecast ->
             resWeatherForecast.fold(
                 onSuccess = {
-                    hideProgressBar()
+                    showAll()
+                    loadingBinding.loadingFinished()
                     showWeatherForecast(it)
                     showActionBarTitle(it.city.name, it.city.country)
                     saveToPreferences(it.city.name, it.city.country)
                 },
                 onFailure =
                 {
-                    when (it) {
-                        is LocationPermissionDeniedException -> requestLocationPermissions()
-                        is InvalidCityException -> showToast(R.string.error_invalid_city)
-                        is IOException -> showToast(it.message.toString())
-                        is HttpException -> showToast(it.message.toString())
-                        else -> showToast(R.string.error_message)
-                    }
+                    showError(it)
                 })
+        }
+    }
+
+    private fun showError(it: Throwable) {
+        loadingBinding.errorOccurred(it) {
+            if (it is LocationPermissionDeniedException) {
+                requestLocationPermissions()
+            } else {
+                loadingBinding.loadingStarted()
+                viewModel.loadData()
+            }
         }
     }
 
@@ -104,21 +109,16 @@ class HomeFragment : Fragment() {
             )
     }
 
-    private fun showProgressBar() {
-        for (view in binding.mainCl.children) {
-            view.visibility = View.INVISIBLE
-            if (view.id == R.id.progress_bar) {
-                (view as ContentLoadingProgressBar).show()
-            }
+
+    private fun showAll() {
+        for (view in binding.root.children) {
+            view.visibility = View.VISIBLE
         }
     }
 
-    private fun hideProgressBar() {
-        for (view in binding.mainCl.children) {
-            view.visibility = View.VISIBLE
-            if (view.id == R.id.progress_bar) {
-                (view as? ContentLoadingProgressBar)?.hide()
-            }
+    private fun hideAll() {
+        for (view in binding.root.children) {
+            view.visibility = View.GONE
         }
     }
 
@@ -206,4 +206,20 @@ class HomeFragment : Fragment() {
         }
     }
 
+    override fun onCreateView(
+        inflater: LayoutInflater, container: ViewGroup?,
+        savedInstanceState: Bundle?
+    ): View {
+        _binding = FragmentMainBinding.inflate(inflater, container, false)
+        _loadingBinding = StateLoadingBinding.bind(binding.root)
+
+        requestLocationPermissions()
+        return binding.root
+    }
+
+    override fun onDestroyView() {
+        super.onDestroyView()
+        _loadingBinding = null
+        _binding = null
+    }
 }
