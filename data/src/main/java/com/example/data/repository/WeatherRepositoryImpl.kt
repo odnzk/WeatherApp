@@ -4,6 +4,7 @@ package com.example.data.repository
 import com.example.data.Api
 import com.example.domain.model.WeatherForecast
 import com.example.domain.repository.WeatherRepository
+import com.example.domain.state.State
 import retrofit2.HttpException
 import java.io.IOException
 import javax.inject.Inject
@@ -14,21 +15,21 @@ class WeatherRepositoryImpl @Inject constructor(private val api: Api) :
     override suspend fun getWeatherForecast(
         latitude: Double,
         longitude: Double
-    ): Result<WeatherForecast> =
+    ): State<WeatherForecast> =
         try {
-            Result.success(api.getWeatherForecast(latitude, longitude))
+            State.Success(api.getWeatherForecast(latitude, longitude))
         } catch (e: IOException) {
-            Result.failure(e)
+            State.Error(e)
         } catch (e: HttpException) {
-            Result.failure(e)
+            State.Error(e)
         }
 
-    override suspend fun getWeatherForecast(cityName: String): Result<WeatherForecast> =
+    override suspend fun getWeatherForecast(cityName: String): State<WeatherForecast> =
         try {
-            Result.success(api.getWeatherForecast(cityName))
+            State.Success(api.getWeatherForecast(cityName))
         } catch (e: IOException) {
-            Result.failure(e)
+            State.Error(e)
         } catch (e: HttpException) {
-            Result.failure(e)
+            State.Error(e)
         }
 }

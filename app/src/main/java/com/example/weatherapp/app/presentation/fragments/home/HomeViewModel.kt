@@ -11,6 +11,7 @@ import com.example.domain.exceptions.InvalidCityException
 import com.example.domain.exceptions.LocationRequestFailedException
 import com.example.domain.model.WeatherForecast
 import com.example.domain.repository.WeatherRepository
+import com.example.domain.state.State
 import com.example.weatherapp.app.MainActivity
 import com.example.weatherapp.app.presentation.util.LocationPermissionManager
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -24,8 +25,9 @@ class HomeViewModel @Inject constructor(
     application: Application
 ) : AndroidViewModel(application) {
 
-    private val _weatherForecast = MutableLiveData<Result<WeatherForecast>>()
-    val weatherForecast: LiveData<Result<WeatherForecast>> = _weatherForecast
+    private val _weatherForecast: MutableLiveData<State<WeatherForecast>> =
+        MutableLiveData(State.Loading())
+    val weatherForecast: LiveData<State<WeatherForecast>> = _weatherForecast
 
     private val locationPermissionManager = LocationPermissionManager(application)
 
@@ -35,6 +37,7 @@ class HomeViewModel @Inject constructor(
 
 
     fun loadData() = viewModelScope.launch {
+        _weatherForecast.value = State.Loading()
         if (sp.getString(MainActivity.PREF_IS_AUTO, "true").toBoolean()) {
             loadDataAuto()
         } else {
@@ -42,7 +45,7 @@ class HomeViewModel @Inject constructor(
             if (!city.isNullOrEmpty() && city.isNotBlank()) {
                 _weatherForecast.value = repository.getWeatherForecast(city)
             } else {
-                _weatherForecast.value = Result.failure(InvalidCityException())
+                _weatherForecast.value = State.Error(InvalidCityException())
             }
         }
     }
@@ -53,14 +56,14 @@ class HomeViewModel @Inject constructor(
             onSuccess = { task ->
                 task.addOnSuccessListener {
                     if (it == null) {
-                        _weatherForecast.value = Result.failure(LocationRequestFailedException())
+                        _weatherForecast.value = State.Error(LocationRequestFailedException())
                     } else {
                         updateWeatherForecastAuto(it)
                     }
                 }
             },
             onFailure = {
-                _weatherForecast.value = Result.failure(it)
+                _weatherForecast.value = State.Error(it)
             })
     }
 

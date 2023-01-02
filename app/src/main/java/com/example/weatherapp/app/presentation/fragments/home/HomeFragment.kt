@@ -16,6 +16,7 @@ import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.RecyclerView
 import com.example.domain.exceptions.LocationPermissionDeniedException
 import com.example.domain.repository.WeatherRepository
+import com.example.domain.state.State
 import com.example.weatherapp.R
 import com.example.weatherapp.app.MainActivity
 import com.example.weatherapp.app.presentation.rv.WeatherForecastAdapter
@@ -65,18 +66,19 @@ class HomeFragment : Fragment() {
 
     private fun initObserves() {
         viewModel.weatherForecast.observe(viewLifecycleOwner) { resWeatherForecast ->
-            resWeatherForecast.fold(
-                onSuccess = {
-                    showAll()
-                    loadingBinding.loadingFinished()
-                    showWeatherForecast(it)
-                    showActionBarTitle(it.city.name, it.city.country)
-                    saveToPreferences(it.city.name, it.city.country)
-                },
-                onFailure =
-                {
-                    showError(it)
-                })
+            when (resWeatherForecast) {
+                is State.Loading -> loadingBinding.loadingStarted()
+                is State.Success -> {
+                    resWeatherForecast.data?.let {
+                        showAll()
+                        loadingBinding.loadingFinished()
+                        showWeatherForecast(it)
+                        showActionBarTitle(it.city.name, it.city.country)
+                        saveToPreferences(it.city.name, it.city.country)
+                    }
+                }
+                is State.Error -> resWeatherForecast.error?.let { showError(it) }
+            }
         }
     }
 
