@@ -1,6 +1,7 @@
 package com.example.weatherapp.app
 
 import android.os.Bundle
+import android.util.Log
 import android.view.Menu
 import android.view.MenuItem
 import androidx.activity.viewModels
@@ -62,7 +63,10 @@ class MainActivity : AppCompatActivity() {
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         when (item.itemId) {
-            R.id.refresh -> viewModel.loadData()
+            R.id.refresh -> {
+                Log.d("TAGTAG", "reloading?")
+                viewModel.loadData()
+            }
             R.id.settingsFragment ->
                 findNavController(R.id.nav_host_fragment).navigate(R.id.action_mainFragment_to_settingsFragment)
             android.R.id.home ->

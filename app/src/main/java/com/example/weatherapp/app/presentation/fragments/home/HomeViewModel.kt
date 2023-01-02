@@ -33,7 +33,7 @@ class HomeViewModel @Inject constructor(
         loadData()
     }
 
-    @Throws(InvalidCityException::class)
+
     fun loadData() = viewModelScope.launch {
         if (sp.getString(MainActivity.PREF_IS_AUTO, "true").toBoolean()) {
             loadDataAuto()
@@ -47,7 +47,6 @@ class HomeViewModel @Inject constructor(
         }
     }
 
-    @Throws(LocationRequestFailedException::class)
     private fun loadDataAuto() {
         val locationRes = locationPermissionManager.getLocation()
         locationRes.fold(

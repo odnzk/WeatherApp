@@ -31,7 +31,7 @@
     <string name="city_country_format">%1$s,  %2$s</string>
 
     <string name="error_no_location_access_granted">Allow using location  to get weather forecast</string>
-    <string name="error_message">Cannot load data about last known location since app is passive provider</string>
+    <string name="error_message">Unknown last location</string>
     <string name="error_invalid_city">Cannot load data for this city</string>
     <string name="error_connection_lost">Connection lost: %1$s</string>
     <string name="error_location_permission_denied">Cannot load data because location permission is denied</string>

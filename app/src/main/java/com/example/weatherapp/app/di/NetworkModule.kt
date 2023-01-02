@@ -2,6 +2,7 @@ package com.example.weatherapp.app.di
 
 import com.example.data.Api
 import com.example.data.repository.WeatherRepositoryImpl
+import com.example.domain.repository.WeatherRepository
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
@@ -46,7 +47,7 @@ object NetworkModule {
 
     @Provides
     @Singleton
-    fun providesRepository(api: Api): com.example.domain.repository.WeatherRepository {
+    fun providesRepository(api: Api): WeatherRepository {
         return WeatherRepositoryImpl(api)
     }
 
