@@ -14,7 +14,6 @@ class LocationPermissionManager(private val application : Application) {
     private val fusedLocationProviderClient =
         LocationServices.getFusedLocationProviderClient(application)
 
-    @Throws(LocationPermissionDeniedException::class)
     fun getLocation(): Result<Task<Location>> {
         if (ActivityCompat.checkSelfPermission(
                 application,

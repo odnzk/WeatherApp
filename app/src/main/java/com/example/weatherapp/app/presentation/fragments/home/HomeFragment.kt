@@ -15,6 +15,8 @@ import androidx.preference.PreferenceManager
 import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.RecyclerView
 import com.example.domain.exceptions.LocationPermissionDeniedException
+import com.example.domain.model.WeatherForecast
+import com.example.domain.model.WeatherInfo
 import com.example.domain.repository.WeatherRepository
 import com.example.domain.state.State
 import com.example.weatherapp.R
@@ -57,9 +59,6 @@ class HomeFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        hideAll()
-        loadingBinding.loadingStarted()
-
         initObserves()
     }
 
@@ -67,7 +66,10 @@ class HomeFragment : Fragment() {
     private fun initObserves() {
         viewModel.weatherForecast.observe(viewLifecycleOwner) { resWeatherForecast ->
             when (resWeatherForecast) {
-                is State.Loading -> loadingBinding.loadingStarted()
+                is State.Loading ->{
+                    hideAll()
+                    loadingBinding.loadingStarted()
+                }
                 is State.Success -> {
                     resWeatherForecast.data?.let {
                         showAll()
@@ -87,7 +89,6 @@ class HomeFragment : Fragment() {
             if (it is LocationPermissionDeniedException) {
                 requestLocationPermissions()
             } else {
-                loadingBinding.loadingStarted()
                 viewModel.loadData()
             }
         }
@@ -125,7 +126,7 @@ class HomeFragment : Fragment() {
     }
 
     private fun showWeatherForecast(
-        weatherForecast: com.example.domain.model.WeatherForecast,
+        weatherForecast: WeatherForecast,
     ) {
         var temperatureUnit: String
         var timeFormat: String
@@ -180,7 +181,7 @@ class HomeFragment : Fragment() {
     private fun setUpAdapter(
         timeFormat: String,
         temperatureUnit: String,
-        list: List<com.example.domain.model.WeatherInfo>
+        list: List<WeatherInfo>
     ) {
         adapter.submitList(list)
         adapter.timeformat = timeFormat
