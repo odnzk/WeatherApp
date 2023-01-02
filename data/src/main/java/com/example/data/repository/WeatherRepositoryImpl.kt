@@ -16,7 +16,7 @@ class WeatherRepositoryImpl @Inject constructor(private val api: Api) :
         longitude: Double
     ): Result<WeatherForecast> =
         try {
-            Result.success(api.getWeatherForecast(latitude, longitude, API_KEY))
+            Result.success(api.getWeatherForecast(latitude, longitude))
         } catch (e: IOException) {
             Result.failure(e)
         } catch (e: HttpException) {
@@ -25,14 +25,10 @@ class WeatherRepositoryImpl @Inject constructor(private val api: Api) :
 
     override suspend fun getWeatherForecast(cityName: String): Result<WeatherForecast> =
         try {
-            Result.success(api.getWeatherForecast(cityName, API_KEY))
+            Result.success(api.getWeatherForecast(cityName))
         } catch (e: IOException) {
             Result.failure(e)
         } catch (e: HttpException) {
             Result.failure(e)
         }
-
-    companion object {
-        private const val API_KEY = "b65750fa8912403310944973c7362a56"
-    }
 }
