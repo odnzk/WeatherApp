@@ -1,9 +1,8 @@
-package com.example.weatherapp.app.presentation.utils.rv
+package com.example.weatherapp.app.presentation.rv
 
 import android.view.ViewGroup
 import androidx.recyclerview.widget.ListAdapter
 import com.example.weatherapp.app.MainActivity
-import com.example.domain.model.WeatherInfo
 
 class WeatherForecastAdapter :
     ListAdapter<com.example.domain.model.WeatherInfo, WeatherHolder>(WeatherForecastDiffUtilCallback()) {

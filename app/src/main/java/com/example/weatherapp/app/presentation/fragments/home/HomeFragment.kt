@@ -1,4 +1,4 @@
-package com.example.weatherapp.app.presentation.fragments
+package com.example.weatherapp.app.presentation.fragments.home
 
 import android.Manifest
 import android.content.SharedPreferences
@@ -6,7 +6,6 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.Toast
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.children
@@ -18,24 +17,31 @@ import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.RecyclerView
 import com.example.domain.exceptions.InvalidCityException
 import com.example.domain.exceptions.LocationPermissionDeniedException
+import com.example.domain.repository.WeatherRepository
 import com.example.weatherapp.R
 import com.example.weatherapp.app.MainActivity
-import com.example.weatherapp.app.presentation.utils.ConvertingManager
-import com.example.weatherapp.app.presentation.utils.rv.WeatherForecastAdapter
-import com.example.weatherapp.app.presentation.viewmodel.ForecastViewModel
+import com.example.weatherapp.app.presentation.rv.WeatherForecastAdapter
+import com.example.weatherapp.app.presentation.util.ConvertingManager
 import com.example.weatherapp.databinding.FragmentMainBinding
 import com.example.weatherapp.ext.setWeatherIcon
+import com.example.weatherapp.ext.showToast
 import dagger.hilt.android.AndroidEntryPoint
+import retrofit2.HttpException
+import java.io.IOException
 import javax.inject.Inject
 
 @AndroidEntryPoint
-class MainFragment : Fragment() {
+class HomeFragment : Fragment() {
     private var _binding: FragmentMainBinding? = null
     private val binding get() = _binding!!
 
     @Inject
     lateinit var sp: SharedPreferences
-    private val viewModel: ForecastViewModel by viewModels()
+
+    @Inject
+    lateinit var repository: WeatherRepository
+
+    private val viewModel: HomeViewModel by viewModels()
     private val adapter = WeatherForecastAdapter()
 
     private val permissionsLauncher =
@@ -44,9 +50,6 @@ class MainFragment : Fragment() {
                 viewModel.loadData()
             }
         }
-
-    @Inject
-    lateinit var repository: com.example.domain.repository.WeatherRepository
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -66,24 +69,18 @@ class MainFragment : Fragment() {
             resWeatherForecast.fold(
                 onSuccess = {
                     hideProgressBar()
-                    setWeatherForecastToUi(it)
+                    showWeatherForecast(it)
                     showActionBarTitle(it.city.name, it.city.country)
                     saveToPreferences(it.city.name, it.city.country)
                 },
                 onFailure =
                 {
                     when (it) {
-                        is LocationPermissionDeniedException -> {
-                            requestLocationPermissions()
-                        }
-                        is InvalidCityException -> {
-                            Toast.makeText(context, R.string.error_invalid_city, Toast.LENGTH_SHORT)
-                                .show()
-                        }
-                        else -> {
-                            Toast.makeText(context, R.string.error_message, Toast.LENGTH_SHORT)
-                                .show()
-                        }
+                        is LocationPermissionDeniedException -> requestLocationPermissions()
+                        is InvalidCityException -> showToast(R.string.error_invalid_city)
+                        is IOException -> showToast(it.message.toString())
+                        is HttpException -> showToast(it.message.toString())
+                        else -> showToast(R.string.error_message)
                     }
                 })
         }
@@ -125,7 +122,7 @@ class MainFragment : Fragment() {
         }
     }
 
-    private fun setWeatherForecastToUi(
+    private fun showWeatherForecast(
         weatherForecast: com.example.domain.model.WeatherForecast,
     ) {
         var temperatureUnit: String
@@ -163,7 +160,6 @@ class MainFragment : Fragment() {
                 tvVisibility.text = converter.convertVisibility(visibility)
                 tvWind.text = getString(R.string.wind_unit, converter.formatDouble(wind.speed))
                 ivWeather.setWeatherIcon(weather[0].id, weather[0].icon)
-//                ivWeather.setWeatherIcon(weather.id, weather.icon)
             }
             weatherForecast.city.run {
                 // EE, h:mmaa -> h:mmaa

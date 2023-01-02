@@ -11,8 +11,7 @@ import androidx.preference.EditTextPreference
 import androidx.preference.PreferenceFragmentCompat
 import com.example.weatherapp.app.MainActivity
 import com.example.weatherapp.R
-import com.example.domain.repository.WeatherRepository
-import com.example.weatherapp.app.presentation.viewmodel.ForecastViewModel
+import com.example.weatherapp.app.presentation.fragments.home.HomeViewModel
 import dagger.hilt.android.AndroidEntryPoint
 import javax.inject.Inject
 
@@ -20,7 +19,7 @@ import javax.inject.Inject
 @AndroidEntryPoint
 class SettingsFragment : PreferenceFragmentCompat() {
 
-    private val viewModel: ForecastViewModel by viewModels()
+    private val viewModel: HomeViewModel by viewModels()
 
     @Inject
     lateinit var repository: com.example.domain.repository.WeatherRepository

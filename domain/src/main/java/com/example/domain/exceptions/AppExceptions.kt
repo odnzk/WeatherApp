@@ -7,3 +7,5 @@ class InvalidCityException : AppException()
 class LocationPermissionDeniedException : AppException()
 
 class LocationRequestFailedException : AppException()
+
+class ConnectionLostException() : AppException()

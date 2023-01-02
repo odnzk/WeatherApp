@@ -1,4 +1,4 @@
-package com.example.weatherapp.app.hilt
+package com.example.weatherapp.app.di
 
 import android.content.Context
 import android.content.SharedPreferences

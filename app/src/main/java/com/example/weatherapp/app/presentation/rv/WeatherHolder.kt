@@ -1,4 +1,4 @@
-package com.example.weatherapp.app.presentation.utils.rv
+package com.example.weatherapp.app.presentation.rv
 
 import android.view.LayoutInflater
 import android.view.ViewGroup
@@ -6,7 +6,7 @@ import androidx.recyclerview.widget.RecyclerView
 import com.example.weatherapp.R
 import com.example.weatherapp.databinding.RvitemWeatherBinding
 import com.example.weatherapp.ext.setWeatherIcon
-import com.example.weatherapp.app.presentation.utils.ConvertingManager
+import com.example.weatherapp.app.presentation.util.ConvertingManager
 
 class WeatherHolder(private val binding: RvitemWeatherBinding) :
     RecyclerView.ViewHolder(binding.root) {
@@ -30,7 +30,6 @@ class WeatherHolder(private val binding: RvitemWeatherBinding) :
                     tvDate.text = converter.convertDateToString(this)
                 }
                 ivWeather.setWeatherIcon(item.weather[0].id, item.weather[0].icon)
-//                ivWeather.setWeatherIcon(weather.id, weather.icon)
             }
         }
     }

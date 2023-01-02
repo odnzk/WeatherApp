@@ -11,10 +11,9 @@ import androidx.navigation.fragment.NavHostFragment
 import androidx.navigation.ui.AppBarConfiguration
 import androidx.navigation.ui.setupActionBarWithNavController
 import com.example.weatherapp.R
-import com.example.domain.repository.WeatherRepository
-import com.example.weatherapp.databinding.ActivityMainBinding
 import com.example.weatherapp.app.presentation.fragments.SettingsFragment
-import com.example.weatherapp.app.presentation.viewmodel.ForecastViewModel
+import com.example.weatherapp.app.presentation.fragments.home.HomeViewModel
+import com.example.weatherapp.databinding.ActivityMainBinding
 import dagger.hilt.android.AndroidEntryPoint
 import javax.inject.Inject
 
@@ -22,7 +21,7 @@ import javax.inject.Inject
 class MainActivity : AppCompatActivity() {
     private lateinit var binding: ActivityMainBinding
 
-    private val viewModel: ForecastViewModel by viewModels()
+    private val viewModel: HomeViewModel by viewModels()
 
     @Inject
     lateinit var repository: com.example.domain.repository.WeatherRepository

@@ -4,7 +4,7 @@ import com.example.domain.model.WeatherForecast
 
 interface WeatherRepository {
 
-    suspend fun getWeatherForecast(latitude: Double, longitude: Double): WeatherForecast
+    suspend fun getWeatherForecast(latitude: Double, longitude: Double): Result<WeatherForecast>
 
-    suspend fun getWeatherForecast(cityName: String): WeatherForecast
+    suspend fun getWeatherForecast(cityName: String): Result<WeatherForecast>
 }

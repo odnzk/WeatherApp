@@ -1,7 +1,6 @@
-package com.example.weatherapp.app.presentation.utils.rv
+package com.example.weatherapp.app.presentation.rv
 
 import androidx.recyclerview.widget.DiffUtil.ItemCallback
-import com.example.domain.model.WeatherInfo
 
 class WeatherForecastDiffUtilCallback : ItemCallback<com.example.domain.model.WeatherInfo>() {
     override fun areItemsTheSame(

@@ -1,4 +1,4 @@
-package com.example.weatherapp.app.presentation.utils
+package com.example.weatherapp.app.presentation.util
 
 import android.Manifest
 import android.app.Application
@@ -14,7 +14,7 @@ class LocationPermissionManager(private val application : Application) {
     private val fusedLocationProviderClient =
         LocationServices.getFusedLocationProviderClient(application)
 
-    @kotlin.jvm.Throws(LocationPermissionDeniedException::class)
+    @Throws(LocationPermissionDeniedException::class)
     fun getLocation(): Result<Task<Location>> {
         if (ActivityCompat.checkSelfPermission(
                 application,
