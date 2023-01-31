@@ -22,7 +22,7 @@
  </p>
  </br>
 <a href="https://www.figma.com/file/ggWLUXOX2sc2asL71Jfwln/WeatherApp?node-id=0%3A1&t=eq9jbIBURl3xf19i-1">
-<img src="https://user-images.githubusercontent.com/66072196/166246753-662d7a8c-cab7-4ff8-84d1-4c4dd525da53.svg"></a>
+<img src="https://raw.githubusercontent.com/Odenezhkina/FakeStore/master/.github/images/figmaIcon.svg"></a>
 
 ## Technology stack
 <b>API: OpenWeather API</b> (5 Day / 3 Hour Forecast)
