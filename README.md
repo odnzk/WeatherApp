@@ -17,12 +17,12 @@
 - [X] Clean Architecture
 
 ## Design
-<p align="">
+<p align="center">
 <img src="https://github.com/Odenezhkina/WeatherApp/blob/master/.github/images/WeatherAppScreens.png">
  </p>
  </br>
 <a href="https://www.figma.com/file/ggWLUXOX2sc2asL71Jfwln/WeatherApp?node-id=0%3A1&t=eq9jbIBURl3xf19i-1">
-<img src="https://raw.githubusercontent.com/Odenezhkina/FakeStore/master/.github/images/figmaIcon.svg"></a>
+<img src="https://raw.githubusercontent.com/Odenezhkina/WeatherApp/master/.github/images/ic_figma.svg"></a>
 
 ## Technology stack
 <b>API: OpenWeather API</b> (5 Day / 3 Hour Forecast)
