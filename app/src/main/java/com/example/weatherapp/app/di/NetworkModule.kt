@@ -46,12 +46,6 @@ object NetworkModule {
         return retrofit.create(Api::class.java)
     }
 
-    @Provides
-    @Singleton
-    fun providesRepository(api: Api): WeatherRepository {
-        return WeatherRepositoryImpl(api)
-    }
-
     private val apiKeyInterceptor = Interceptor { chain ->
         val original = chain.request()
         val newURL = original.url().newBuilder()
