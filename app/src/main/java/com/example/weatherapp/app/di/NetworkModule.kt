@@ -1,6 +1,7 @@
 package com.example.weatherapp.app.di
 
 import com.example.data.Api
+import com.example.data.BuildConfig
 import com.example.data.repository.WeatherRepositoryImpl
 import com.example.domain.repository.WeatherRepository
 import dagger.Module
@@ -14,7 +15,7 @@ import retrofit2.converter.gson.GsonConverterFactory
 import javax.inject.Singleton
 
 private const val WEATHER_BASE_URL = "http://api.openweathermap.org/data/2.5/"
-private const val API_KEY = "b65750fa8912403310944973c7362a56"
+private const val API_KEY = BuildConfig.API_KEY
 private const val QUERY_API_KEY = "appid"
 
 @Module
