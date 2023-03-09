@@ -1,4 +1,4 @@
-package com.example.weatherapp.app.presentation.fragments.home
+package com.example.weatherapp.app.presentation.home
 
 import android.Manifest
 import android.content.SharedPreferences
@@ -8,7 +8,7 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.appcompat.app.AppCompatActivity
-import androidx.core.view.children
+import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.preference.PreferenceManager
@@ -21,11 +21,11 @@ import com.example.domain.repository.WeatherRepository
 import com.example.domain.state.State
 import com.example.weatherapp.R
 import com.example.weatherapp.app.MainActivity
-import com.example.weatherapp.app.presentation.rv.WeatherForecastAdapter
+import com.example.weatherapp.app.presentation.util.rv.WeatherForecastAdapter
 import com.example.weatherapp.app.presentation.util.ConvertingManager
-import com.example.weatherapp.app.presentation.util.ext.errorOccurred
-import com.example.weatherapp.app.presentation.util.ext.loadingFinished
-import com.example.weatherapp.app.presentation.util.ext.loadingStarted
+import com.example.weatherapp.app.presentation.util.extensions.errorOccurred
+import com.example.weatherapp.app.presentation.util.extensions.loadingFinished
+import com.example.weatherapp.app.presentation.util.extensions.loadingStarted
 import com.example.weatherapp.databinding.FragmentMainBinding
 import com.example.weatherapp.databinding.StateLoadingBinding
 import com.example.weatherapp.ext.setWeatherIcon
@@ -39,15 +39,14 @@ class HomeFragment : Fragment() {
 
     private var _loadingBinding: StateLoadingBinding? = null
     private val loadingBinding: StateLoadingBinding get() = _loadingBinding!!
-
-    @Inject
-    lateinit var sp: SharedPreferences
-
-    @Inject
-    lateinit var repository: WeatherRepository
-
     private val viewModel: HomeViewModel by viewModels()
     private val adapter = WeatherForecastAdapter()
+
+    @Inject
+    lateinit var sp: SharedPreferences // todo
+
+    @Inject
+    lateinit var repository: WeatherRepository // todo
 
     private val permissionsLauncher =
         registerForActivityResult(ActivityResultContracts.RequestMultiplePermissions()) {
@@ -58,7 +57,6 @@ class HomeFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-
         initObserves()
     }
 
@@ -67,12 +65,12 @@ class HomeFragment : Fragment() {
         viewModel.weatherForecast.observe(viewLifecycleOwner) { resWeatherForecast ->
             when (resWeatherForecast) {
                 is State.Loading ->{
-                    hideAll()
+                    binding.root.isVisible = false //todo
                     loadingBinding.loadingStarted()
                 }
                 is State.Success -> {
                     resWeatherForecast.data?.let {
-                        showAll()
+                        binding.root.isVisible = true // todo
                         loadingBinding.loadingFinished()
                         showWeatherForecast(it)
                         showActionBarTitle(it.city.name, it.city.country)
@@ -110,19 +108,6 @@ class HomeFragment : Fragment() {
                 city,
                 country
             )
-    }
-
-
-    private fun showAll() {
-        for (view in binding.root.children) {
-            view.visibility = View.VISIBLE
-        }
-    }
-
-    private fun hideAll() {
-        for (view in binding.root.children) {
-            view.visibility = View.GONE
-        }
     }
 
     private fun showWeatherForecast(

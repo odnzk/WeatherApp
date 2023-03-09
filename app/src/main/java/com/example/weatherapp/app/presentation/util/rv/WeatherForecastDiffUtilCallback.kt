@@ -1,4 +1,4 @@
-package com.example.weatherapp.app.presentation.rv
+package com.example.weatherapp.app.presentation.util.rv
 
 import androidx.recyclerview.widget.DiffUtil.ItemCallback
 

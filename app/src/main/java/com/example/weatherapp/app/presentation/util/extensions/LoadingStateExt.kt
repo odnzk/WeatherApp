@@ -1,4 +1,4 @@
-package com.example.weatherapp.app.presentation.util.ext
+package com.example.weatherapp.app.presentation.util.extensions
 
 import androidx.core.view.isVisible
 import com.example.domain.exceptions.InvalidCityException

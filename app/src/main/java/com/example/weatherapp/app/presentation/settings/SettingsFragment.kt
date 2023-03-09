@@ -1,4 +1,4 @@
-package com.example.weatherapp.app.presentation.fragments
+package com.example.weatherapp.app.presentation.settings
 
 import android.os.Bundle
 import android.view.LayoutInflater
@@ -11,7 +11,7 @@ import androidx.preference.EditTextPreference
 import androidx.preference.PreferenceFragmentCompat
 import com.example.weatherapp.app.MainActivity
 import com.example.weatherapp.R
-import com.example.weatherapp.app.presentation.fragments.home.HomeViewModel
+import com.example.weatherapp.app.presentation.home.HomeViewModel
 import dagger.hilt.android.AndroidEntryPoint
 import javax.inject.Inject
 

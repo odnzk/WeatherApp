@@ -11,8 +11,8 @@ import androidx.navigation.fragment.NavHostFragment
 import androidx.navigation.ui.AppBarConfiguration
 import androidx.navigation.ui.setupActionBarWithNavController
 import com.example.weatherapp.R
-import com.example.weatherapp.app.presentation.fragments.SettingsFragment
-import com.example.weatherapp.app.presentation.fragments.home.HomeViewModel
+import com.example.weatherapp.app.presentation.settings.SettingsFragment
+import com.example.weatherapp.app.presentation.home.HomeViewModel
 import com.example.weatherapp.databinding.ActivityMainBinding
 import dagger.hilt.android.AndroidEntryPoint
 import javax.inject.Inject

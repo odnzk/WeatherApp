@@ -7,12 +7,12 @@
     android:layout_height="match_parent"
     android:padding="20dp"
     android:background="@color/main_blue"
-    tools:context=".app.presentation.fragments.home.HomeFragment">
+    tools:context=".app.presentation.home.HomeFragment">
 
     <ImageView
         android:contentDescription="@string/weather_condition_image"
         android:id="@+id/iv_weather"
-        android:src="@drawable/ic_sun"
+        tools:src="@drawable/ic_sun"
         android:adjustViewBounds="true"
         android:scaleType="fitCenter"
         android:layout_width="140dp"
@@ -23,7 +23,7 @@
 
     <TextView
         android:id="@+id/tv_temperature"
-        style="@style/Headline1"
+        android:textAppearance="@style/TextAppearance.WeatherApp.Title1"
         tools:text="234 K"
         android:layout_width="0dp"
         android:gravity="start"
@@ -34,7 +34,7 @@
 
     <TextView
         android:id="@+id/tv_feels_like"
-        style="@style/Headline2"
+        style="@style/TextAppearance.WeatherApp.Title2"
         android:layout_height="wrap_content"
         tools:text="Feels like 234 K"
         android:layout_width="0dp"
@@ -51,6 +51,7 @@
         tools:text="Mon, 23:59"
         android:format12Hour="EE, HH:mmaa"
         android:format24Hour="EE, HH:mm"
+        android:textAppearance="@style/TextAppearance.WeatherApp.Body2"
         app:layout_constraintEnd_toStartOf="@id/iv_weather"
         app:layout_constraintStart_toStartOf="@id/tv_temperature"
         app:layout_constraintTop_toBottomOf="@id/tv_feels_like" />
@@ -105,13 +106,11 @@
 
     <TextView
         android:id="@+id/tv_title_visibility"
-        style="@style/Headline2"
+        android:textAppearance="@style/TextAppearance.WeatherApp.Title2"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:gravity="center"
         android:text="@string/visibility"
-        android:autoSizeMinTextSize="18sp"
-        android:autoSizeMaxTextSize="25sp"
         app:layout_constraintBottom_toTopOf="@id/tv_visibility"
         app:layout_constraintEnd_toStartOf="@id/tv_title_humidity"
         app:layout_constraintStart_toStartOf="parent"
@@ -119,7 +118,7 @@
 
     <TextView
         android:id="@+id/tv_title_humidity"
-        style="@style/Headline2"
+        android:textAppearance="@style/TextAppearance.WeatherApp.Title2"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginTop="10dp"
@@ -132,7 +131,7 @@
     <TextView
         android:id="@+id/tv_title_wind"
         android:layout_width="0dp"
-        style="@style/Headline2"
+        android:textAppearance="@style/TextAppearance.WeatherApp.Title2"
         android:layout_height="wrap_content"
         android:gravity="center"
         android:text="@string/wind"
@@ -208,7 +207,7 @@
 
     <TextView
         android:id="@+id/tv_sunrise_title"
-        style="@style/Headline2"
+        android:textAppearance="@style/TextAppearance.WeatherApp.Title2"
         android:layout_height="wrap_content"
         android:text="@string/sunrise"
         android:layout_width="0dp"
@@ -231,7 +230,7 @@
 
     <TextView
         android:id="@+id/tv_sunset_title"
-        style="@style/Headline2"
+        android:textAppearance="@style/TextAppearance.WeatherApp.Title2"
         android:layout_height="wrap_content"
         android:text="@string/sunset"
         android:layout_width="0dp"
