@@ -1,28 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <style name="Headline1" parent="Widget.MaterialComponents.TextView">
-        <item name="android:fontFamily">@font/source_sans_pro_bold</item>
-        <item name="android:textSize">44sp</item>
-        <item name="android:textColor">@color/white</item>
-    </style>
-
-    <style name="Headline2" parent="Widget.MaterialComponents.TextView">
-        <item name="android:fontFamily">@font/source_sans_pro_semibold</item>
-        <item name="android:textColor">@color/white</item>
-        <item name="autoSizeMaxTextSize">20sp</item>
-        <item name="autoSizeMinTextSize">18sp</item>
-    </style>
-
-    <style name="Body1" parent="Widget.MaterialComponents.TextView">
-        <item name="android:textSize">18sp</item>
-        <item name="android:textColor">@color/white</item>
-    </style>
-
-    <style name="Body2" parent="Widget.MaterialComponents.TextView">
-        <item name="android:textSize">12sp</item>
-        <item name="android:textColor">@color/white</item>
-    </style>
-
     <style name="Theme.AlertDialog.Default" parent="ThemeOverlay.MaterialComponents.MaterialAlertDialog">
         <item name="android:textColor">@color/grey</item>
     </style>

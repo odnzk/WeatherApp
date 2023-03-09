@@ -1,8 +1,8 @@
-package com.example.weatherapp.app.presentation.util.ext
+package com.example.weatherapp.app.presentation.util.extensions
 
 import androidx.core.view.isVisible
-import com.example.domain.exceptions.InvalidCityException
-import com.example.domain.exceptions.LocationPermissionDeniedException
+import com.example.domain.util.InvalidCityException
+import com.example.domain.util.LocationPermissionDeniedException
 import com.example.weatherapp.R
 import com.example.weatherapp.databinding.StateLoadingBinding
 import retrofit2.HttpException

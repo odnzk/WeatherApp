@@ -1,31 +1,30 @@
-package com.example.weatherapp.app.presentation.fragments.home
+package com.example.weatherapp.app.presentation.home
 
 import android.Manifest
-import android.content.SharedPreferences
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.appcompat.app.AppCompatActivity
-import androidx.core.view.children
+import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.preference.PreferenceManager
 import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.RecyclerView
-import com.example.domain.exceptions.LocationPermissionDeniedException
-import com.example.domain.model.WeatherForecast
-import com.example.domain.model.WeatherInfo
+import com.example.domain.util.LocationPermissionDeniedException
+import com.example.domain.model.weather.WeatherForecast
+import com.example.domain.model.weather.WeatherInfo
 import com.example.domain.repository.WeatherRepository
-import com.example.domain.state.State
+import com.example.domain.model.state.State
 import com.example.weatherapp.R
 import com.example.weatherapp.app.MainActivity
-import com.example.weatherapp.app.presentation.rv.WeatherForecastAdapter
 import com.example.weatherapp.app.presentation.util.ConvertingManager
-import com.example.weatherapp.app.presentation.util.ext.errorOccurred
-import com.example.weatherapp.app.presentation.util.ext.loadingFinished
-import com.example.weatherapp.app.presentation.util.ext.loadingStarted
+import com.example.weatherapp.app.presentation.util.extensions.errorOccurred
+import com.example.weatherapp.app.presentation.util.extensions.loadingFinished
+import com.example.weatherapp.app.presentation.util.extensions.loadingStarted
+import com.example.weatherapp.app.presentation.util.rv.WeatherForecastAdapter
 import com.example.weatherapp.databinding.FragmentMainBinding
 import com.example.weatherapp.databinding.StateLoadingBinding
 import com.example.weatherapp.ext.setWeatherIcon
@@ -39,26 +38,21 @@ class HomeFragment : Fragment() {
 
     private var _loadingBinding: StateLoadingBinding? = null
     private val loadingBinding: StateLoadingBinding get() = _loadingBinding!!
-
-    @Inject
-    lateinit var sp: SharedPreferences
-
-    @Inject
-    lateinit var repository: WeatherRepository
-
     private val viewModel: HomeViewModel by viewModels()
     private val adapter = WeatherForecastAdapter()
+
+    @Inject
+    lateinit var repository: WeatherRepository // todo
 
     private val permissionsLauncher =
         registerForActivityResult(ActivityResultContracts.RequestMultiplePermissions()) {
             if (it[Manifest.permission.ACCESS_FINE_LOCATION] == true || it[Manifest.permission.ACCESS_COARSE_LOCATION] == true) {
-                viewModel.loadData()
+                viewModel.onEvent(HomeFragmentEvent.Reload)
             }
         }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-
         initObserves()
     }
 
@@ -67,16 +61,20 @@ class HomeFragment : Fragment() {
         viewModel.weatherForecast.observe(viewLifecycleOwner) { resWeatherForecast ->
             when (resWeatherForecast) {
                 is State.Loading ->{
-                    hideAll()
+                    binding.root.isVisible = false //todo
                     loadingBinding.loadingStarted()
                 }
                 is State.Success -> {
                     resWeatherForecast.data?.let {
-                        showAll()
+                        binding.root.isVisible = true // todo
                         loadingBinding.loadingFinished()
                         showWeatherForecast(it)
                         showActionBarTitle(it.city.name, it.city.country)
-                        saveToPreferences(it.city.name, it.city.country)
+                        viewModel.onEvent(
+                            HomeFragmentEvent.SaveCitySettings(
+                                it.city.name, it.city.country
+                            )
+                        )
                     }
                 }
                 is State.Error -> resWeatherForecast.error?.let { showError(it) }
@@ -89,7 +87,7 @@ class HomeFragment : Fragment() {
             if (it is LocationPermissionDeniedException) {
                 requestLocationPermissions()
             } else {
-                viewModel.loadData()
+                viewModel.onEvent(HomeFragmentEvent.Reload)
             }
         }
     }
@@ -110,19 +108,6 @@ class HomeFragment : Fragment() {
                 city,
                 country
             )
-    }
-
-
-    private fun showAll() {
-        for (view in binding.root.children) {
-            view.visibility = View.VISIBLE
-        }
-    }
-
-    private fun hideAll() {
-        for (view in binding.root.children) {
-            view.visibility = View.GONE
-        }
     }
 
     private fun showWeatherForecast(
@@ -198,14 +183,6 @@ class HomeFragment : Fragment() {
             )
             rvWeather.setHasFixedSize(true)
             rvWeather.adapter = adapter
-        }
-    }
-
-    private fun saveToPreferences(city: String, country: String) {
-        sp.edit().run {
-            putString(MainActivity.PREF_CITY_KEY, city)
-            putString(MainActivity.PREF_COUNTRY_KEY, country)
-            apply()
         }
     }
 

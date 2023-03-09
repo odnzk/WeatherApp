@@ -1,21 +1,22 @@
-package com.example.weatherapp.app.presentation.fragments.home
+package com.example.weatherapp.app.presentation.home
 
 import android.app.Application
 import android.content.SharedPreferences
-import android.location.Location
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.viewModelScope
-import com.example.domain.exceptions.InvalidCityException
-import com.example.domain.exceptions.LocationRequestFailedException
-import com.example.domain.model.WeatherForecast
+import com.example.domain.util.InvalidCityException
+import com.example.domain.util.LocationRequestFailedException
+import com.example.domain.model.weather.WeatherForecast
 import com.example.domain.repository.WeatherRepository
-import com.example.domain.state.State
+import com.example.domain.model.state.State
 import com.example.weatherapp.app.MainActivity
 import com.example.weatherapp.app.presentation.util.LocationPermissionManager
 import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 import javax.inject.Inject
 
 @HiltViewModel
@@ -35,8 +36,21 @@ class HomeViewModel @Inject constructor(
         loadData()
     }
 
+    fun onEvent(event: HomeFragmentEvent) = viewModelScope.launch {
+        when (event) {
+            is HomeFragmentEvent.SaveCitySettings -> {
+                sp.edit().run {
+                    putString(MainActivity.PREF_CITY_KEY, event.city)
+                    putString(MainActivity.PREF_COUNTRY_KEY, event.country)
+                    apply()
+                }
+            }
+            HomeFragmentEvent.Reload -> loadData()
+        }
+    }
 
-    fun loadData() = viewModelScope.launch {
+
+    private fun loadData() = viewModelScope.launch {
         _weatherForecast.value = State.Loading()
         if (sp.getString(MainActivity.PREF_IS_AUTO, "true").toBoolean()) {
             loadDataAuto()
@@ -50,7 +64,7 @@ class HomeViewModel @Inject constructor(
         }
     }
 
-    private fun loadDataAuto() {
+    private suspend fun loadDataAuto() = withContext(Dispatchers.IO) {
         val locationRes = locationPermissionManager.getLocation()
         locationRes.fold(
             onSuccess = { task ->
@@ -58,7 +72,10 @@ class HomeViewModel @Inject constructor(
                     if (it == null) {
                         _weatherForecast.value = State.Error(LocationRequestFailedException())
                     } else {
-                        updateWeatherForecastAuto(it)
+                        launch {
+                            _weatherForecast.value =
+                                repository.getWeatherForecast(it.latitude, it.longitude)
+                        }
                     }
                 }
             },
@@ -66,10 +83,4 @@ class HomeViewModel @Inject constructor(
                 _weatherForecast.value = State.Error(it)
             })
     }
-
-    private fun updateWeatherForecastAuto(it: Location) =
-        viewModelScope.launch {
-            _weatherForecast.value = repository.getWeatherForecast(it.latitude, it.longitude)
-        }
-
 }

@@ -1,8 +1,9 @@
-package com.example.weatherapp.app.presentation.rv
+package com.example.weatherapp.app.presentation.util.rv
 
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
+import com.example.domain.model.weather.WeatherInfo
 import com.example.weatherapp.R
 import com.example.weatherapp.databinding.RvitemWeatherBinding
 import com.example.weatherapp.ext.setWeatherIcon
@@ -13,7 +14,7 @@ class WeatherHolder(private val binding: RvitemWeatherBinding) :
 
     private val converter = ConvertingManager(binding.root.resources)
 
-    fun bind(item: com.example.domain.model.WeatherInfo, temperatureUnit: String, timeFormat: String) {
+    fun bind(item: WeatherInfo, temperatureUnit: String, timeFormat: String) {
         val res = itemView.context.resources
         with(binding) {
             item.run {

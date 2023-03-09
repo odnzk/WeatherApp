@@ -1,11 +1,12 @@
-package com.example.weatherapp.app.presentation.rv
+package com.example.weatherapp.app.presentation.util.rv
 
 import android.view.ViewGroup
 import androidx.recyclerview.widget.ListAdapter
+import com.example.domain.model.weather.WeatherInfo
 import com.example.weatherapp.app.MainActivity
 
 class WeatherForecastAdapter :
-    ListAdapter<com.example.domain.model.WeatherInfo, WeatherHolder>(WeatherForecastDiffUtilCallback()) {
+    ListAdapter<WeatherInfo, WeatherHolder>(WeatherForecastDiffUtilCallback()) {
 
     var temperatureUnit: String = MainActivity.DEFAULT_TEMPERATURE_UNIT
     var timeformat: String = MainActivity.DEFAULT_TIMEFORMAT

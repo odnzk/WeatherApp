@@ -1,4 +1,4 @@
-package com.example.domain.state
+package com.example.domain.model.state
 
 
 sealed class State<T>(val data: T? = null, val error: Throwable? = null) {

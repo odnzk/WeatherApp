@@ -1,7 +1,7 @@
 package com.example.domain.repository
 
-import com.example.domain.model.WeatherForecast
-import com.example.domain.state.State
+import com.example.domain.model.weather.WeatherForecast
+import com.example.domain.model.state.State
 
 interface WeatherRepository {
 

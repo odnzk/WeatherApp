@@ -1,4 +1,4 @@
-package com.example.weatherapp.app.presentation.fragments
+package com.example.weatherapp.app.presentation.settings
 
 import android.os.Bundle
 import android.view.LayoutInflater
@@ -9,9 +9,10 @@ import androidx.fragment.app.viewModels
 import androidx.preference.DropDownPreference
 import androidx.preference.EditTextPreference
 import androidx.preference.PreferenceFragmentCompat
-import com.example.weatherapp.app.MainActivity
 import com.example.weatherapp.R
-import com.example.weatherapp.app.presentation.fragments.home.HomeViewModel
+import com.example.weatherapp.app.MainActivity
+import com.example.weatherapp.app.presentation.home.HomeFragmentEvent
+import com.example.weatherapp.app.presentation.home.HomeViewModel
 import dagger.hilt.android.AndroidEntryPoint
 import javax.inject.Inject
 
@@ -31,12 +32,12 @@ class SettingsFragment : PreferenceFragmentCompat() {
 
         findPreference<EditTextPreference>(MainActivity.PREF_CITY_KEY)?.context?.setTheme(R.style.Theme_AlertDialog_Default)
         findPreference<EditTextPreference>(MainActivity.PREF_CITY_KEY)?.setOnPreferenceChangeListener { _, _ ->
-            viewModel.loadData()
+            viewModel.onEvent(HomeFragmentEvent.Reload)
             true
         }
 
         findPreference<DropDownPreference>(MainActivity.PREF_IS_AUTO)?.setOnPreferenceChangeListener { _, _ ->
-            viewModel.loadData()
+            viewModel.onEvent(HomeFragmentEvent.Reload)
             true
         }
     }

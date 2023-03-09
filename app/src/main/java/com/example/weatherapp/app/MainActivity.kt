@@ -11,8 +11,9 @@ import androidx.navigation.fragment.NavHostFragment
 import androidx.navigation.ui.AppBarConfiguration
 import androidx.navigation.ui.setupActionBarWithNavController
 import com.example.weatherapp.R
-import com.example.weatherapp.app.presentation.fragments.SettingsFragment
-import com.example.weatherapp.app.presentation.fragments.home.HomeViewModel
+import com.example.weatherapp.app.presentation.home.HomeFragmentEvent
+import com.example.weatherapp.app.presentation.home.HomeViewModel
+import com.example.weatherapp.app.presentation.settings.SettingsFragment
 import com.example.weatherapp.databinding.ActivityMainBinding
 import dagger.hilt.android.AndroidEntryPoint
 import javax.inject.Inject
@@ -62,7 +63,7 @@ class MainActivity : AppCompatActivity() {
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         when (item.itemId) {
-            R.id.refresh -> viewModel.loadData()
+            R.id.refresh -> viewModel.onEvent(HomeFragmentEvent.Reload)
             R.id.settingsFragment ->
                 findNavController(R.id.nav_host_fragment).navigate(R.id.action_mainFragment_to_settingsFragment)
             android.R.id.home ->

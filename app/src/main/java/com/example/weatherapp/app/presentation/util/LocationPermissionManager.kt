@@ -5,7 +5,7 @@ import android.app.Application
 import android.content.pm.PackageManager
 import android.location.Location
 import androidx.core.app.ActivityCompat
-import com.example.domain.exceptions.LocationPermissionDeniedException
+import com.example.domain.util.LocationPermissionDeniedException
 import com.google.android.gms.location.LocationServices
 import com.google.android.gms.tasks.Task
 

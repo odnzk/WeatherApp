@@ -1,4 +1,4 @@
-package com.example.domain.model
+package com.example.domain.model.weather
 
 data class City(
     val country: String,
