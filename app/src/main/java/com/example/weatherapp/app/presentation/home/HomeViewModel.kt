@@ -6,17 +6,15 @@ import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.viewModelScope
-import com.example.domain.util.InvalidCityException
-import com.example.domain.util.LocationRequestFailedException
+import com.example.domain.model.state.State
 import com.example.domain.model.weather.WeatherForecast
 import com.example.domain.repository.WeatherRepository
-import com.example.domain.model.state.State
+import com.example.domain.util.InvalidCityException
+import com.example.domain.util.LocationRequestFailedException
 import com.example.weatherapp.app.MainActivity
 import com.example.weatherapp.app.presentation.util.LocationPermissionManager
 import dagger.hilt.android.lifecycle.HiltViewModel
-import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
-import kotlinx.coroutines.withContext
 import javax.inject.Inject
 
 @HiltViewModel
@@ -51,7 +49,6 @@ class HomeViewModel @Inject constructor(
 
 
     private fun loadData() = viewModelScope.launch {
-        _weatherForecast.value = State.Loading()
         if (sp.getString(MainActivity.PREF_IS_AUTO, "true").toBoolean()) {
             loadDataAuto()
         } else {
@@ -64,7 +61,7 @@ class HomeViewModel @Inject constructor(
         }
     }
 
-    private suspend fun loadDataAuto() = withContext(Dispatchers.IO) {
+    private suspend fun loadDataAuto() = viewModelScope.launch {
         val locationRes = locationPermissionManager.getLocation()
         locationRes.fold(
             onSuccess = { task ->
@@ -72,7 +69,7 @@ class HomeViewModel @Inject constructor(
                     if (it == null) {
                         _weatherForecast.value = State.Error(LocationRequestFailedException())
                     } else {
-                        launch {
+                        viewModelScope.launch {
                             _weatherForecast.value =
                                 repository.getWeatherForecast(it.latitude, it.longitude)
                         }

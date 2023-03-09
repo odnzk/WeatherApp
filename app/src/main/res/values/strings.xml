@@ -40,6 +40,8 @@
     <string name="precise_location_access_granted">Please, try loading weather forecast again</string>
     <string name="obtaining_location_method">Obtaining a location</string>
     <string name="try_again">Try again</string>
+    <string name="change_location_permission_in_settings">Enable location permission in settings</string>
+    <string name="location_denied">Cannot provide forecast since location permission is denied</string>
 
 
     <string-array name="days_of_week">

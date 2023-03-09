@@ -2,34 +2,30 @@ package com.example.weatherapp.app.presentation.home
 
 import android.Manifest
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.appcompat.app.AppCompatActivity
-import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.preference.PreferenceManager
 import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.RecyclerView
-import com.example.domain.util.LocationPermissionDeniedException
+import com.example.domain.model.state.State
 import com.example.domain.model.weather.WeatherForecast
 import com.example.domain.model.weather.WeatherInfo
-import com.example.domain.repository.WeatherRepository
-import com.example.domain.model.state.State
+import com.example.domain.util.LocationPermissionDeniedException
 import com.example.weatherapp.R
 import com.example.weatherapp.app.MainActivity
 import com.example.weatherapp.app.presentation.util.ConvertingManager
-import com.example.weatherapp.app.presentation.util.extensions.errorOccurred
-import com.example.weatherapp.app.presentation.util.extensions.loadingFinished
-import com.example.weatherapp.app.presentation.util.extensions.loadingStarted
+import com.example.weatherapp.app.presentation.util.extensions.*
 import com.example.weatherapp.app.presentation.util.rv.WeatherForecastAdapter
 import com.example.weatherapp.databinding.FragmentMainBinding
 import com.example.weatherapp.databinding.StateLoadingBinding
 import com.example.weatherapp.ext.setWeatherIcon
 import dagger.hilt.android.AndroidEntryPoint
-import javax.inject.Inject
 
 @AndroidEntryPoint
 class HomeFragment : Fragment() {
@@ -41,13 +37,18 @@ class HomeFragment : Fragment() {
     private val viewModel: HomeViewModel by viewModels()
     private val adapter = WeatherForecastAdapter()
 
-    @Inject
-    lateinit var repository: WeatherRepository // todo
-
     private val permissionsLauncher =
-        registerForActivityResult(ActivityResultContracts.RequestMultiplePermissions()) {
-            if (it[Manifest.permission.ACCESS_FINE_LOCATION] == true || it[Manifest.permission.ACCESS_COARSE_LOCATION] == true) {
-                viewModel.onEvent(HomeFragmentEvent.Reload)
+        registerForActivityResult(ActivityResultContracts.RequestPermission()) { granted ->
+            when {
+                granted -> viewModel.onEvent(HomeFragmentEvent.Reload)
+                !shouldShowRequestPermissionRationale(Manifest.permission.ACCESS_COARSE_LOCATION) -> {
+                    Log.d("location", "change_location_permission_in_settings")
+                    binding.root.showToast(R.string.change_location_permission_in_settings)
+                }
+                else -> {
+                    Log.d("location", "location_denied")
+                    binding.root.showToast(R.string.location_denied)
+                }
             }
         }
 
@@ -61,12 +62,12 @@ class HomeFragment : Fragment() {
         viewModel.weatherForecast.observe(viewLifecycleOwner) { resWeatherForecast ->
             when (resWeatherForecast) {
                 is State.Loading ->{
-                    binding.root.isVisible = false //todo
+                    binding.hideChildren()
                     loadingBinding.loadingStarted()
                 }
                 is State.Success -> {
                     resWeatherForecast.data?.let {
-                        binding.root.isVisible = true // todo
+                        binding.showChildren()
                         loadingBinding.loadingFinished()
                         showWeatherForecast(it)
                         showActionBarTitle(it.city.name, it.city.country)
@@ -83,6 +84,7 @@ class HomeFragment : Fragment() {
     }
 
     private fun showError(it: Throwable) {
+        binding.hideChildren()
         loadingBinding.errorOccurred(it) {
             if (it is LocationPermissionDeniedException) {
                 requestLocationPermissions()
@@ -93,12 +95,7 @@ class HomeFragment : Fragment() {
     }
 
     private fun requestLocationPermissions() {
-        permissionsLauncher.launch(
-            arrayOf(
-                Manifest.permission.ACCESS_COARSE_LOCATION,
-                Manifest.permission.ACCESS_FINE_LOCATION
-            )
-        )
+        permissionsLauncher.launch(Manifest.permission.ACCESS_COARSE_LOCATION)
     }
 
     private fun showActionBarTitle(city: String, country: String) {

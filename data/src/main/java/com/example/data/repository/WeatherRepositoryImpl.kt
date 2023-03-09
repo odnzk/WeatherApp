@@ -12,9 +12,7 @@ class WeatherRepositoryImpl @Inject constructor(private val api: OpenWeatherApi)
 
     override suspend fun getWeatherForecast(
         latitude: Double, longitude: Double
-    ): State<WeatherForecast> = safeRequest {
-        api.getWeatherForecast(latitude, longitude)
-    }
+    ): State<WeatherForecast> = safeRequest { api.getWeatherForecast(latitude, longitude) }
 
     override suspend fun getWeatherForecast(cityName: String): State<WeatherForecast> =
         safeRequest { api.getWeatherForecast(cityName) }
